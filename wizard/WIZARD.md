@@ -170,7 +170,7 @@ esac
 
 ## Generation Rules
 
-1. **No template comments** — Remove ALL `<!-- WIZARD: ... -->` comments from generated files
+1. **No template comments** — Remove ALL `<!-- WIZARD: ... -->` comments from generated files, including format references
 2. **No unfilled placeholders** — Replace ALL `[bracketed placeholders]` with real values
 3. **Consistent names** — Use the same project name and owner name everywhere
 4. **Consistent commands** — Use the same test command in DD and Team files
