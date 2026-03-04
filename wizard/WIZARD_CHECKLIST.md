@@ -68,8 +68,8 @@ plus a launcher script.
 
 - [ ] `start_role.sh` — Parameterized script in project root
   - Accepts role argument (pd / dd / team)
-  - Loads correct role file into Claude session
-  - Executable (`chmod +x`)
+  - Loads correct role file into Claude Code session
+  - Executable (`chmod +x`) instruction present
 
 ---
 
@@ -85,6 +85,7 @@ Before finishing, verify:
 - [ ] **Project name is consistent** — Same name used everywhere
 - [ ] **Test command is consistent** — Same command in DD and Team role files
 - [ ] **Coding conventions match** — DD's Section 4 and Team's Section 4 agree on all conventions
+- [ ] **Communication language applied consistently** — All generated content uses the user's chosen language
 
 ---
 
@@ -93,6 +94,7 @@ Before finishing, verify:
 The Wizard must have answers to all of these before generating:
 
 ### Phase 1 — Project Basics
+- [ ] Communication language
 - [ ] Project name
 - [ ] Project description (1-2 paragraphs)
 - [ ] Tech stack (languages, frameworks, key dependencies)
@@ -103,10 +105,9 @@ The Wizard must have answers to all of these before generating:
 - [ ] Number of initial phases (and their names/descriptions)
 - [ ] Autonomy level: strict / moderate / high
 - [ ] Review strictness: strict / moderate / lenient
-- [ ] Phase dependencies (if any specific ordering beyond linear)
+- [ ] Dispatcher control level: full control / PD + DD / PD only
 
 ### Phase 3 — Technical Context
-- [ ] Workspace path
 - [ ] Test command(s)
 - [ ] Dependency policy (stdlib-only / conservative / liberal)
 - [ ] Key architectural concepts
@@ -114,7 +115,5 @@ The Wizard must have answers to all of these before generating:
 
 ### Phase 4 — Coding Conventions
 - [ ] Naming conventions (files, classes, functions, variables, constants)
-- [ ] Documentation style (docstrings, comments, type hints)
-- [ ] Error handling approach
 - [ ] Branch strategy and commit conventions
 - [ ] Any special rules or constraints

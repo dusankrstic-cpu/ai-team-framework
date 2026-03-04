@@ -1,9 +1,9 @@
 # AI Team Framework
 
 A file-based framework for managing software projects with multiple AI roles.
-Three specialized Claude sessions — **Project Director**, **Development Director**,
-and **Development Team** — collaborate through markdown documents, with a human
-dispatcher coordinating between them.
+Built for **Claude Code** (Anthropic's CLI for Claude). Three specialized Claude
+sessions — **Project Director**, **Development Director**, and **Development Team** —
+collaborate through markdown documents, with a human dispatcher coordinating between them.
 
 No server, no database, just markdown files and conventions.
 
@@ -36,6 +36,12 @@ Each role:
 
 ---
 
+## Prerequisites
+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (Anthropic's CLI for Claude) installed and available as `claude`
+
+---
+
 ## Quick Start
 
 ### 1. Clone the framework
@@ -51,13 +57,30 @@ cd /path/to/your-project
 claude "$(cat /path/to/ai-team-framework/wizard/WIZARD.md)"
 ```
 
+Or use the launcher script:
+
+```bash
+cd /path/to/your-project
+/path/to/ai-team-framework/scripts/start_role.sh wizard
+```
+
 The Wizard asks about your project (name, tech stack, conventions, phases) and
-generates a complete `docs/TEAM/` directory with all role definitions and state files.
+generates a complete `docs/TEAM/` directory with all role definitions and state files,
+including a `start_role.sh` launcher script in your project root.
 
 ### 3. Start your first cycle
 
+Use the generated launcher script:
+
 ```bash
-# Start a Project Director session
+./start_role.sh pd     # Start a Project Director session
+./start_role.sh dd     # Start a Development Director session
+./start_role.sh team   # Start a Development Team session
+```
+
+Or start manually:
+
+```bash
 claude
 # Tell it: "Read docs/TEAM/PROJECT_DIRECTOR.md and follow the startup protocol"
 ```
@@ -113,7 +136,7 @@ Each document has clear ownership — who writes what:
 |----------|-----|-----|------|
 | DIRECTIVES/ | writes | reads | reads |
 | PROJECT_STATUS.md §2 | reads | **writes** | reads |
-| PROJECT_STATUS.md §3-9 | **writes** | reads | reads |
+| PROJECT_STATUS.md §1,3-9 | **writes** | reads | reads |
 | DECISIONS.md | reads | **writes** | reads |
 | TODO.md (text) | reads | **writes** | reads |
 | TODO.md (checkboxes) | reads | reads | **writes** |
@@ -162,7 +185,7 @@ ai-team-framework/
 │   ├── DIRECTIVE_TEMPLATE.md
 │   └── REPORT_TEMPLATE.md
 ├── scripts/
-│   └── start_role.sh                    # Role launcher script
+│   └── start_role.sh                    # Role launcher (pd|dd|team|wizard|help)
 └── docs/
     ├── GUIDE.md                         # Detailed user guide
     ├── ROLES_EXPLAINED.md               # Deep dive into each role
@@ -180,6 +203,14 @@ ai-team-framework/
 | [Roles Explained](docs/ROLES_EXPLAINED.md) | What each role does and why |
 | [Communication Protocol](docs/COMMUNICATION_PROTOCOL.md) | How information flows between roles |
 | [Examples](docs/EXAMPLES.md) | Complete walkthrough of a real cycle |
+
+---
+
+## Example
+
+The `docs/TEAM/` directory in this repo contains real files from the project where
+this framework was originally developed ([ai-software-swarm](https://github.com/dusankrstic-cpu/ai-software-swarm)).
+You can browse them to see what the Wizard generates in practice.
 
 ---
 

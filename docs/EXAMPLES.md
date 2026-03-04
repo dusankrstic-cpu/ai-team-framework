@@ -1,8 +1,8 @@
 # Examples — Full Session Cycle Walkthrough
 
-A concrete example showing how the AI Team Framework works in practice. We'll follow
-a fictional project through its first complete cycle: from PD directive to accepted
-implementation.
+A concrete example showing how the AI Team Framework works in practice using
+**Claude Code CLI**. We'll follow a fictional project through its first complete
+cycle: from PD directive to accepted implementation.
 
 ---
 
@@ -290,7 +290,12 @@ Phase 2 (CLI commands) — awaiting directive.
 **Directive:** YES (DIRECTIVE_2026-03-01_start-phase2.md)
 ```
 
-4. Issues directive for Phase 2...
+4. Updates the Phase 1 directive status:
+```markdown
+**Status:** COMPLETED
+```
+
+5. Issues directive for Phase 2...
 
 **The cycle continues.**
 

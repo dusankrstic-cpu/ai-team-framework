@@ -1,9 +1,5 @@
 # Directive: [Title]
 
-<!-- WIZARD: This is a format reference. The Wizard does NOT customize this file —
-     it ships as-is into the user's project. It defines the standard format that
-     the Project Director uses when issuing directives. -->
-
 **Date:** YYYY-MM-DD
 **Priority:** HIGH / MEDIUM / LOW
 **Deadline:** YYYY-MM-DD or "none"

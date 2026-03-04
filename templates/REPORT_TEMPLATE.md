@@ -1,9 +1,5 @@
 # Report — Phase N: [Phase Name]
 
-<!-- WIZARD: This is a format reference. The Wizard does NOT customize this file —
-     it ships as-is into the user's project. It defines the standard format that
-     the Development Team uses when submitting implementation reports. -->
-
 **Date:** YYYY-MM-DD
 **Status:** COMPLETED / PARTIAL / BLOCKED
 

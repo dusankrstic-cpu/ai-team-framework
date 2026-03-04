@@ -34,13 +34,20 @@ in `docs/TEAM/`.
 
 ### Step 3: Start Your First Cycle
 
+Use the generated launcher script:
+
 ```bash
-# Start with the Project Director
+./start_role.sh pd     # Start a Project Director session
+```
+
+Or start manually:
+
+```bash
 claude
 # Tell it: "Read docs/TEAM/PROJECT_DIRECTOR.md and follow the startup protocol"
 ```
 
-That's it. The PD will review the initial state and issue the first directive.
+The PD will review the initial state and issue the first directive.
 
 ---
 

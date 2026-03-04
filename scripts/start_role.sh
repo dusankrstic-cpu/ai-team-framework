@@ -52,6 +52,8 @@ show_help() {
     echo "          Asks about your project and generates all team files."
     echo "          (Requires FRAMEWORK_DIR to be set or script to be in framework repo)"
     echo ""
+    echo "Requires: Claude Code CLI (https://docs.anthropic.com/en/docs/claude-code)"
+    echo ""
     echo "Workflow:"
     echo "  1. $0 pd     → PD reviews state, issues directive"
     echo "  2. $0 dd     → DD reads directive, creates TODO tasks"

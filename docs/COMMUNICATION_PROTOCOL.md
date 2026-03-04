@@ -28,6 +28,7 @@ miscommunication, and allow any session to pick up where the last one left off.
            DIRECTIVES/     │          │ REPORTS/
                            │          │ DECISIONS.md
                            │          │ PROJECT_STATUS.md §2
+                           │          │ ARCHITECTURE_VISION.md
                            ▼          │
                     ┌──────────────────┘──┐
                     │     Dispatcher      │
