@@ -20,17 +20,18 @@ if ! command -v claude &> /dev/null; then
     exit 1
 fi
 
-# Check if team directory exists
-if [ ! -d "$TEAM_DIR" ]; then
-    echo "Error: Team directory '$TEAM_DIR' not found."
-    echo ""
-    echo "Have you run the Wizard yet? If not:"
-    echo "  claude \"\$(cat /path/to/ai-team-framework/wizard/WIZARD.md)\""
-    echo ""
-    echo "Or set TEAM_DIR to point to your team files:"
-    echo "  TEAM_DIR=path/to/team ./start_role.sh pd"
-    exit 1
-fi
+check_team_dir() {
+    if [ ! -d "$TEAM_DIR" ]; then
+        echo "Error: Team directory '$TEAM_DIR' not found."
+        echo ""
+        echo "Have you run the Wizard yet? If not:"
+        echo "  claude \"\$(cat /path/to/ai-team-framework/wizard/WIZARD.md)\""
+        echo ""
+        echo "Or set TEAM_DIR to point to your team files:"
+        echo "  TEAM_DIR=path/to/team ./start_role.sh pd"
+        exit 1
+    fi
+}
 
 show_help() {
     echo "AI Team Framework — Role Launcher"
@@ -81,18 +82,21 @@ start_session() {
     echo "Example: \"Read $role_file and follow your startup protocol.\""
     echo ""
 
-    # Start Claude with the role file content as system context
-    claude --print "$role_file"
+    # Start Claude interactively with the role file content as initial prompt
+    claude "$(cat "$role_file")"
 }
 
 case "$ROLE" in
     pd|director|project-director)
+        check_team_dir
         start_session "$TEAM_DIR/PROJECT_DIRECTOR.md" "Project Director"
         ;;
     dd|dev-director|development-director)
+        check_team_dir
         start_session "$TEAM_DIR/DEVELOPMENT_DIRECTOR.md" "Development Director"
         ;;
     team|dev|development-team)
+        check_team_dir
         start_session "$TEAM_DIR/DEVELOPMENT_TEAM.md" "Development Team"
         ;;
     wizard)
@@ -107,7 +111,7 @@ case "$ROLE" in
         echo "  Starting: Initialization Wizard"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo ""
-        claude --print "$WIZARD_FILE"
+        claude "$(cat "$WIZARD_FILE")"
         ;;
     help|--help|-h)
         show_help
