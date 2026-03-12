@@ -114,6 +114,8 @@ After reading, report to the project owner:
 - Identify and document strategic risks
 - Decide mitigation strategies
 - Escalate blockers to the project owner
+- **Recommend project backups** before risky phases or major scope changes
+  (the owner runs `./start_role.sh backup` to create a timestamped archive)
 
 ### 5.5 Decision Authority
 

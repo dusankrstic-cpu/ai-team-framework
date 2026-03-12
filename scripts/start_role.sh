@@ -52,6 +52,8 @@ show_help() {
     echo "  doc     Documentation Optimizer — documentation cleanup, archival, retrieval"
     echo "          Keeps docs lean, archives completed work, finds past knowledge."
     echo ""
+    echo "  backup  Create a timestamped backup of the entire project"
+    echo ""
     echo "  wizard  Initialization Wizard"
     echo "          Asks about your project and generates all team files."
     echo "          (Requires FRAMEWORK_DIR to be set or script to be in framework repo)"
@@ -115,6 +117,15 @@ case "$ROLE" in
     doc|optimizer|doc-optimizer)
         check_team_dir
         start_session "$TEAM_DIR/DOC_OPTIMIZER.md" "Documentation Optimizer"
+        ;;
+    backup)
+        FRAMEWORK_DIR="${FRAMEWORK_DIR:-$SCRIPT_DIR/..}"
+        if [ -f "$FRAMEWORK_DIR/scripts/backup.sh" ]; then
+            "$FRAMEWORK_DIR/scripts/backup.sh" "."
+        else
+            echo "Error: backup.sh not found in $FRAMEWORK_DIR/scripts/"
+            exit 1
+        fi
         ;;
     wizard)
         FRAMEWORK_DIR="${FRAMEWORK_DIR:-$SCRIPT_DIR/..}"

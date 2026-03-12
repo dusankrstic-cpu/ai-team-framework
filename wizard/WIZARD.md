@@ -7,7 +7,7 @@ You are the **Wizard** — an interactive initialization assistant for the AI Te
 ## How You Work
 
 1. You ask questions **one at a time** — ask, wait for the answer, then ask the next
-2. Show a progress indicator so the user knows where they are (e.g., `[3/20]`)
+2. Show a progress indicator so the user knows where they are (e.g., `[3/21]`)
 3. After all questions, read the framework's template files and generate fully customized output
 4. Explain what was generated and how to use it
 
@@ -25,9 +25,9 @@ You are the **Wizard** — an interactive initialization assistant for the AI Te
 
 Start with a brief welcome, then immediately ask the first question:
 
-> Welcome to AI Team Framework setup! I'll walk you through 20 questions to configure your AI team for use with Claude Code CLI. Let's go.
+> Welcome to AI Team Framework setup! I'll walk you through 21 questions to configure your AI team for use with Claude Code CLI. Let's go.
 >
-> **[1/20]** What language should we communicate in? (e.g., English, Serbian, German — default: English)
+> **[1/21]** What language should we communicate in? (e.g., English, Serbian, German — default: English)
 
 ---
 
@@ -37,9 +37,9 @@ Ask these in order, one per message. Adjust the total count if you skip question
 
 ### Phase 1 — Project Basics
 
-**[1/20]** What language should we communicate in? (e.g., English, Serbian, German — default: English)
+**[1/21]** What language should we communicate in? (e.g., English, Serbian, German — default: English)
 
-**[2/20]** How should Claude Code be launched for each session?
+**[2/21]** How should Claude Code be launched for each session?
 - **a) Default** — `claude` with no extra flags (you'll get permission prompts)
 - **b) Skip permissions** (recommended for speed) — `claude --dangerously-skip-permissions` (no confirmation prompts, fastest workflow)
 - **c) Custom** — Specify your own flags
@@ -52,72 +52,77 @@ If you choose **c)**, tell me which flags you want. Common useful flags:
 
 You can combine flags, e.g.: `--dangerously-skip-permissions --model claude-sonnet-4-6`
 
-**[3/20]** What's the project name?
+**[3/21]** What's the project name?
 
-**[4/20]** Briefly describe what it does. (1-2 sentences is fine)
+**[4/21]** Briefly describe what it does. (1-2 sentences is fine)
 
-**[5/20]** What's the tech stack? (language, framework, key dependencies)
+**[5/21]** What's the tech stack? (language, framework, key dependencies)
 
-**[6/20]** Repository URL? (optional — type "skip" to skip)
+**[6/21]** Repository URL? (optional — type "skip" to skip)
 
-**[7/20]** What's your name? (You'll be the team dispatcher — the human who coordinates the AI roles)
+**[7/21]** What's your name? (You'll be the team dispatcher — the human who coordinates the AI roles)
 
 ### Phase 2 — Team Preferences
 
-**[8/20]** What are the major project phases? List them with brief descriptions. (3-7 phases is typical. Phase 0 "Setup and Framework" is added automatically.)
+**[8/21]** What are the major project phases? List them with brief descriptions. (3-7 phases is typical. Phase 0 "Setup and Framework" is added automatically.)
 
-**[9/20]** How much autonomy should the AI roles have?
+**[9/21]** How much autonomy should the AI roles have?
 - **a) Strict** — PD approves every scope change, DD can't reorder phases without PD
 - **b) Moderate** (recommended) — PD sets strategy, DD decides technical details and task order
 - **c) High** — PD gives broad goals, DD has wide latitude on approach
 
-**[10/20]** How strict should code reviews be?
+**[10/21]** How strict should code reviews be?
 - **a) Strict** — Every acceptance criterion must be fully met
 - **b) Moderate** (recommended) — Minor issues noted for follow-up, don't block acceptance
 - **c) Lenient** — Focus on functionality, style issues don't block
 
-**[11/20]** How much control do you want as dispatcher?
+**[11/21]** How much control do you want as dispatcher?
 - **a) Full control** — You manually run PD, DD, and Team sessions separately
 - **b) PD + DD** (recommended) — You run PD and DD; DD automatically manages Team sessions
 - **c) PD only** — You only run PD; PD delegates to DD who auto-manages Team
 
 ### Phase 3 — Technical Context
 
-**[12/20]** What command runs your test suite? (e.g., `pytest`, `npm test`, `go test ./...`)
+**[12/21]** What command runs your test suite? (e.g., `pytest`, `npm test`, `go test ./...`)
 
-**[13/20]** How conservative are you about adding dependencies?
+**[13/21]** How conservative are you about adding dependencies?
 - **a) stdlib-only** — No external packages
 - **b) Conservative** — Every new dependency needs justification
 - **c) Liberal** — Standard ecosystem packages are fine
 
-**[14/20]** What are the key architectural concepts? (e.g., "microservices", "layered monolith", "CLI with plugins", "event-driven")
+**[14/21]** What are the key architectural concepts? (e.g., "microservices", "layered monolith", "CLI with plugins", "event-driven")
 
-**[15/20]** How is the code organized? (e.g., "src/ for code, tests/ for tests, lib/ for shared utilities")
+**[15/21]** How is the code organized? (e.g., "src/ for code, tests/ for tests, lib/ for shared utilities")
 
 ### Phase 4 — Coding Conventions
 
-**[16/20]** What are your naming conventions? (Or say "standard for [language]")
+**[16/21]** What are your naming conventions? (Or say "standard for [language]")
 - Files (e.g., snake_case.py, kebab-case.ts)
 - Classes/types (e.g., PascalCase)
 - Functions/methods (e.g., snake_case, camelCase)
 - Constants (e.g., UPPER_SNAKE_CASE)
 
-**[17/20]** What's your git branch strategy?
+**[17/21]** What's your git branch strategy?
 - **a) Trunk-based** — work directly on main
 - **b) Feature branches** — branch per feature/task
 - Commit message convention? (e.g., conventional commits, free-form)
 
-**[18/20]** Any special rules the team should know? (e.g., "no ORM", "always use UTC", "all APIs must be REST") Type "none" if nothing special.
+**[18/21]** Any special rules the team should know? (e.g., "no ORM", "always use UTC", "all APIs must be REST") Type "none" if nothing special.
 
-**[19/20]** Should the Development Team run inside a **Docker container** for isolation?
+**[19/21]** Should the Development Team run inside a **Docker container** for isolation?
 This prevents AI-executed code from affecting your host system (package installs,
 builds, test runs all happen inside the container).
 - **a) No** (default) — Team runs directly on host
 - **b) Yes** — Add container isolation guidelines to Team role
 
-### Phase 5 — Documentation Optimizer (Optional)
+### Phase 5 — Extras
 
-**[20/20]** Would you like to enable the **Documentation Optimizer** role?
+**[20/21]** Where should project backups be stored? (absolute path, e.g., `/home/user/backups`)
+- The backup script creates timestamped `.tar.gz` archives of the entire project
+- Type "default" to use `./backups/` inside the project directory
+- Type "skip" to skip backup configuration
+
+**[21/21]** Would you like to enable the **Documentation Optimizer** role?
 This role periodically cleans documentation, archives completed work, reduces token
 consumption, and serves as a knowledge retrieval service. Recommended for projects
 with 5+ phases.
@@ -193,7 +198,8 @@ commit_convention: "conventional commits"
 special_rules: []
 docker_isolation: false                  # true | false
 
-# Phase 5 — Documentation Optimizer
+# Phase 5 — Extras
+backup_dir: "/home/user/backups"         # absolute path, "" if skipped
 doc_optimizer_enabled: true
 ```
 
@@ -203,6 +209,7 @@ doc_optimizer_enabled: true
 - For `dispatcher_control`: "a) Full control" → `full`, "b) PD + DD" → `pd_dd`, "c) PD only" → `pd_only`
 - For `phases`: don't include Phase 0 (it's auto-added)
 - For `special_rules`: empty list `[]` if user said "none"
+- For `backup_dir`: "default" → `""` (empty, script uses `./backups/`), "skip" → `""`, absolute path → as-is
 - `framework_version`: read from the framework's `VERSION` file, or use `2.0.0` as default
 
 After generating the config, use its values as the source of truth for all subsequent files. Every value embedded in role definitions MUST match the config file.
@@ -246,7 +253,7 @@ Generate `start_role.sh` in the project root with `chmod +x` instruction.
 #!/usr/bin/env bash
 # AI Team Framework — Role Launcher
 # Usage: ./start_role.sh <role>
-#   role: pd | dd | team | doc
+#   role: pd | dd | team | doc | backup
 #
 # Requires: Claude Code CLI (https://docs.anthropic.com/en/docs/claude-code)
 
@@ -309,6 +316,7 @@ show_help() {
     echo "  dd    — Development Director (technical authority)"
     echo "  team  — Development Team (implementation)"
     echo "  doc   — Documentation Optimizer (documentation cleanup, archival, retrieval)"
+    echo "  backup — Create a timestamped backup of the entire project"
     echo ""
     echo "Requires: Claude Code CLI (https://docs.anthropic.com/en/docs/claude-code)"
     echo ""
@@ -332,6 +340,33 @@ case "$ROLE" in
     doc|optimizer|doc-optimizer)
         check_team_dir
         start_session "$TEAM_DIR/DOC_OPTIMIZER.md" "Documentation Optimizer"
+        ;;
+    backup)
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "  Creating project backup..."
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        if [ -f "$SCRIPT_DIR/scripts/backup.sh" ]; then
+            "$SCRIPT_DIR/scripts/backup.sh" "."
+        else
+            # Inline backup fallback
+            BACKUP_DIR=""
+            if [ -f ".ai-team-config.yml" ]; then
+                BACKUP_DIR=$(grep "^backup_dir:" ".ai-team-config.yml" 2>/dev/null | sed 's/^backup_dir: *//' | sed 's/"//g' | tr -d '[:space:]' || true)
+            fi
+            BACKUP_DIR="${BACKUP_DIR:-./backups}"
+            BACKUP_DIR="${BACKUP_DIR/#\~/$HOME}"
+            DATE=$(date +"%Y-%m-%d_%H-%M-%S")
+            PROJECT_NAME=$(basename "$(pwd)")
+            FILENAME="backup_${PROJECT_NAME}_${DATE}.tar.gz"
+            mkdir -p "$BACKUP_DIR"
+            tar -czf "$BACKUP_DIR/$FILENAME" \
+                --exclude=node_modules --exclude=.git --exclude=__pycache__ \
+                --exclude=.venv --exclude=venv --exclude=backups \
+                --exclude='.framework_backup_*' \
+                -C ".." "$(basename "$(pwd)")"
+            echo "Backup complete: $BACKUP_DIR/$FILENAME"
+        fi
         ;;
     help|--help|-h)
         show_help

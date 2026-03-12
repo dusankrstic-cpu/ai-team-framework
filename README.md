@@ -35,7 +35,7 @@ Each role is a separate Claude Code session that reads specific documents, does 
 - **Auto-orchestrator** — watches document state, recommends next role, auto-runs cycles with confirmation at quality gates
 
 ### Interactive Setup Wizard
-- **20-question guided setup** — walks you through project configuration one question at a time
+- **21-question guided setup** — walks you through project configuration one question at a time
 - **Generates 9-12 customized files** — role definitions, state files, format references, launcher script
 - **Tech-stack-aware defaults** — suggests conventions based on your language and framework
 - **Configurable autonomy** — choose how much control you keep vs. delegate to AI roles
@@ -114,6 +114,7 @@ Or let the **orchestrator** handle it:
 ./scripts/orchestrator.sh suggest      # Just tell me what to run next
 ./scripts/orchestrator.sh auto         # Auto-run roles with confirmation prompts
 ./scripts/orchestrator.sh auto --no-confirm  # Auto-advance, confirm only at quality gates
+./start_role.sh backup                       # Create timestamped project backup
 ```
 
 ---
@@ -146,7 +147,7 @@ Or use the launcher script:
 /path/to/ai-team-framework/scripts/start_role.sh wizard
 ```
 
-The Wizard asks 20 questions about your project — name, tech stack, conventions, phases, autonomy level, review strictness, CLI flags — then generates a complete `docs/TEAM/` directory with everything you need.
+The Wizard asks 21 questions about your project — name, tech stack, conventions, phases, autonomy level, review strictness, CLI flags — then generates a complete `docs/TEAM/` directory with everything you need.
 
 ### 3. Start your first cycle
 
@@ -256,7 +257,7 @@ ai-team-framework/
 ├── LICENSE                              # MIT
 ├── VERSION                              # Framework version
 ├── wizard/
-│   ├── WIZARD.md                        # 20-question interactive setup
+│   ├── WIZARD.md                        # 21-question interactive setup
 │   └── WIZARD_CHECKLIST.md              # Generation completeness checklist
 ├── templates/                           # Annotated reference templates
 │   ├── PROJECT_DIRECTOR.md
@@ -275,6 +276,7 @@ ai-team-framework/
 │   ├── start_role.sh                    # Role launcher (pd|dd|team|doc|wizard|help)
 │   ├── orchestrator.sh                  # Auto-orchestrator (status|suggest|auto)
 │   ├── lint_docs.sh                     # Document structure validator
+│   ├── backup.sh                        # Project backup (timestamped tar.gz)
 │   └── update_project.sh               # Project updater for version upgrades
 ├── update/
 │   └── UPDATE_PROMPT.md                 # Update agent instructions
