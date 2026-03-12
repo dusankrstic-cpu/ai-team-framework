@@ -166,7 +166,34 @@ Between sessions, you:
 3. **Resolve disputes.** If PD and DD disagree, you decide. If Team raises a concern
    that can't wait for a review, you route it.
 
+### Using the Orchestrator (Recommended)
+
+Instead of manually tracking state and deciding which role runs next, use the
+orchestrator:
+
+```bash
+# Show status dashboard with recommendation
+/path/to/ai-team-framework/scripts/orchestrator.sh
+
+# Just tell me what to run next
+/path/to/ai-team-framework/scripts/orchestrator.sh suggest
+
+# Auto-run the cycle with confirmations at each step
+/path/to/ai-team-framework/scripts/orchestrator.sh auto
+
+# Auto-run, only pause for quality gates (DD reviews, PD decisions)
+/path/to/ai-team-framework/scripts/orchestrator.sh auto --no-confirm
+```
+
+The orchestrator reads your project documents, detects state signals (new directives,
+unreviewed reports, NEEDS_FIXES verdicts), and recommends or auto-runs the next role.
+It generates the context message for you — no need to remember what to say.
+
 ### What to Say When Starting Each Session
+
+If you prefer to run sessions manually (without the orchestrator):
+
+
 
 **Starting PD:**
 > "Read docs/TEAM/PROJECT_DIRECTOR.md. The DD just accepted Phase 2. Update status

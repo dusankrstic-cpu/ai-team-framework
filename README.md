@@ -32,6 +32,7 @@ Each role is a separate Claude Code session that reads specific documents, does 
 - **Document-driven communication** — roles talk through markdown files, creating a complete audit trail
 - **Stateless sessions** — every session starts fresh from documents, eliminating context drift
 - **Decision authority matrix** — clear rules for who decides what (strategic vs. technical vs. trivial)
+- **Auto-orchestrator** — watches document state, recommends next role, auto-runs cycles with confirmation at quality gates
 
 ### Interactive Setup Wizard
 - **19-question guided setup** — walks you through project configuration one question at a time
@@ -100,6 +101,15 @@ Each role is a separate Claude Code session that reads specific documents, does 
 ```
 
 You (the human dispatcher) start each session and tell the role what happened since last time. Each role reads its documents and picks up where the previous session left off. You stay in full control — the AI team works for you, not the other way around.
+
+Or let the **orchestrator** handle it:
+
+```bash
+./scripts/orchestrator.sh              # Show status dashboard + recommendation
+./scripts/orchestrator.sh suggest      # Just tell me what to run next
+./scripts/orchestrator.sh auto         # Auto-run roles with confirmation prompts
+./scripts/orchestrator.sh auto --no-confirm  # Auto-advance, confirm only at quality gates
+```
 
 ---
 
@@ -258,6 +268,7 @@ ai-team-framework/
 │   └── ARCHIVE_INDEX.md
 ├── scripts/
 │   ├── start_role.sh                    # Role launcher (pd|dd|team|doc|wizard|help)
+│   ├── orchestrator.sh                  # Auto-orchestrator (status|suggest|auto)
 │   └── update_project.sh               # Project updater for version upgrades
 ├── update/
 │   └── UPDATE_PROMPT.md                 # Update agent instructions
