@@ -169,6 +169,25 @@ After reading, report to the project owner:
 - [Where docs go — e.g., "docs/"]
 - [Any module organization rules]
 
+### 6.4 Worktree Implementation (When Delegated)
+
+<!-- WIZARD: Include this section if worktree delegation is enabled in the DD role.
+     Omit for trunk-based simple projects. -->
+
+When the DD assigns you to work in a **git worktree** (an isolated copy of the repo):
+
+1. **Work only in the worktree directory** — do not touch the main working tree
+2. **Make clean, atomic commits** — each commit should be a logical unit of work that
+   can be reviewed independently
+3. **Run the full test suite** in the worktree before submitting your report
+4. **Never copy whole files** back to main yourself — the DD handles the merge via
+   surgical diff review
+5. **Your report should include:**
+   - The worktree branch name
+   - List of commits with one-line descriptions
+   - Files changed (with line counts)
+   - Test results from within the worktree
+
 ---
 
 ## 7. Report Format

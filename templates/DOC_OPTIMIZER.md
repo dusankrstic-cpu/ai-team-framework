@@ -97,17 +97,28 @@ After reading, report to the project owner:
 - Extract old DECISIONS.md entries (for completed phases) to `ARCHIVE/DECISIONS/`
 - Leave a one-line summary pointer in the original document when archiving
 
-### 5.3 Archive Index Maintenance
+### 5.3 Operational Knowledge Preservation
+
+**Before archiving any content, extract reusable knowledge:**
+
+- Scan completed phase reports for **patterns that recurred** (e.g., "test setup was tricky because...")
+- Identify **lessons learned** and **guidelines** that future phases should follow
+- Write these as **GUIDELINE entries** in DECISIONS.md (if technical) or OPTIMIZATION_LOG.md (if process-related)
+- Only then archive the source material
+
+This ensures the team gets smarter over time, not just lighter.
+
+### 5.4 Archive Index Maintenance
 - Keep `ARCHIVE_INDEX.md` current — every archived item must be indexed
 - Include: original filename, archive date, one-line summary, archive location
 - Organize by type (directives, reports, decisions)
 
-### 5.4 Knowledge Retrieval
+### 5.5 Knowledge Retrieval
 - When a role needs information that may have been archived, search the archive
 - Write retrieval results to `ARCHIVE/RETRIEVAL_RESPONSE.md`
 - Include: who requested it, what was queried, where it was found, the relevant content
 
-### 5.5 Token Budget Reporting
+### 5.6 Token Budget Reporting
 - Report document sizes before and after optimization (line counts)
 - Track cumulative savings in OPTIMIZATION_LOG.md
 - Recommend optimization frequency based on document growth rate
@@ -140,13 +151,28 @@ These rules are **non-negotiable**. Breaking them can harm other roles.
 | Reports for IN_PROGRESS phases | DD review may be pending |
 | Source code and test files | Not your domain |
 
+### Document Size Thresholds
+
+Use these as triggers for when optimization is needed:
+
+| Document | Warning | Action Required | Target After Optimization |
+|----------|---------|----------------|--------------------------|
+| `TODO.md` | > 300 lines | > 500 lines | < 200 lines |
+| `DECISIONS.md` | > 200 lines | > 300 lines | < 150 lines |
+| Individual report | > 150 lines | > 200 lines | Summary pointer (< 5 lines) |
+| `ARCHIVE_INDEX.md` | > 200 lines | > 300 lines | Reorganize, group by quarter |
+
+**How to measure:** At session start, count lines of key documents and compare against
+these thresholds. Report any documents in "Action Required" range to the project owner.
+
 ### Core Safety Principles
 
 1. **Archive, never delete** — Every piece of information goes to ARCHIVE/ or stays in place
 2. **Only touch COMPLETED work** — If a phase is IN_PROGRESS or NOT_STARTED, hands off
 3. **Preserve meaning** — Compression means fewer words, not different meaning
-4. **Log everything** — Every optimization action gets an OPTIMIZATION_LOG.md entry
-5. **When in doubt, don't optimize** — A slightly longer document is better than a broken workflow
+4. **Extract before archiving** — Capture lessons learned and patterns as GUIDELINE entries before moving content to the archive (see §5.3)
+5. **Log everything** — Every optimization action gets an OPTIMIZATION_LOG.md entry
+6. **When in doubt, don't optimize** — A slightly longer document is better than a broken workflow
 
 ---
 

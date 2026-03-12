@@ -116,6 +116,20 @@ After reading, report to the project owner:
 
 [Project-specific technical constraints]
 
+### 4.6 Context Protection
+
+Your context window is expensive — reserve it for decisions, not output.
+
+- **Never run the full test suite** in a DD session. Delegate test execution to Team
+  sessions or verify results from reports. If you must run tests, run only the specific
+  test file relevant to your review.
+- **Never run builds or installs** that produce verbose output. Redirect to files
+  (`> build.log 2>&1`) if absolutely needed.
+- **Your session is for:** reading diffs, reviewing reports, writing DECISIONS.md entries,
+  creating TODO tasks, and making architectural judgments. Keep it focused on these.
+- **Delegate heavy operations** — compilation, full test runs, large file generation —
+  to Team sessions where context overflow is recoverable.
+
 ---
 
 ## 5. Your Responsibilities
@@ -155,11 +169,17 @@ After reading, report to the project owner:
 When reviewing a report from the Development Team:
 
 1. **Read the report** thoroughly
-2. **Run the tests** (or confirm test results)
+2. **Confirm test results** from the report (do NOT re-run the full suite yourself — see §4.6)
 3. **Check acceptance criteria** from TODO.md — each must be met
-4. **Verify no regressions** — existing tests still pass
+4. **Verify no regressions** — existing tests still pass per report
 5. **Check architectural consistency** — aligns with ARCHITECTURE_VISION.md
-6. **Issue verdict** in DECISIONS.md:
+6. **Scan for common agent regression patterns:**
+   - Hardcoded values that should be configurable
+   - Duplicated logic that should use existing shared code
+   - Missing error handling at system boundaries
+   - Test assertions that are too loose (e.g., `assert result is not None` instead of checking value)
+   - Changed files outside the assigned scope
+7. **Issue verdict** in DECISIONS.md:
    - **ACCEPTED** — all criteria met, update phase status
    - **NEEDS_FIXES** — list specific issues, team resubmits
    - **REJECTED** — fundamental problems, explain why
@@ -180,6 +200,32 @@ When reviewing a report from the Development Team:
 - Log all decisions in DECISIONS.md using the standard format
 - Types: REVIEW / DECISION / GUIDELINE / VISION_CHANGE_PROPOSAL
 - Your technical decisions are final unless PD overrides on strategic grounds
+
+### 5.6 Worktree Delegation (Optional)
+
+<!-- WIZARD: Include this section if the project uses feature branches or if the user
+     wants parallel implementation capability. Omit for trunk-based simple projects. -->
+
+For phases that can be parallelized, you may delegate work to **isolated git worktrees**:
+
+1. **Create a worktree** for the Team session:
+   ```bash
+   git worktree add ../project-phase-N phase-N
+   ```
+2. **Team implements** in the worktree — full isolation, no conflicts with main
+3. **Surgical merge** — when work is complete, **never copy whole files** back to main.
+   Instead:
+   - Review the diff: `git diff main...phase-N -- <specific files>`
+   - Apply only the relevant hunks: `git checkout phase-N -- <specific files>` or
+     cherry-pick individual commits
+   - Verify no unintended changes leaked in
+4. **Clean up** the worktree after merge:
+   ```bash
+   git worktree remove ../project-phase-N
+   ```
+
+**Key rule:** The DD reviews worktree output the same way as any report — through diffs,
+not by running the code. The Team is responsible for test results in the worktree.
 
 ---
 

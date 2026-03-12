@@ -1,50 +1,114 @@
 # AI Team Framework
 
-A file-based framework for managing software projects with multiple AI roles.
-Built for **Claude Code** (Anthropic's CLI for Claude). Specialized Claude sessions —
-**Project Director**, **Development Director**, **Development Team**, and optionally
-**Documentation Optimizer** — collaborate through markdown documents, with a human
-dispatcher coordinating between them.
+**Turn Claude Code into a self-organizing AI development team.**
 
-No server, no database, just markdown files and conventions.
+AI Team Framework is an orchestration layer for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) on **Linux** that transforms a single AI assistant into a coordinated team of specialized roles — each with clear authority, strict document ownership, and zero shared memory. The result: traceable, repeatable, production-grade software delivery driven by AI.
+
+No server. No database. No API keys. Just markdown files, Claude Code CLI, and a human dispatcher who stays in control.
+
+---
+
+## Why This Exists
+
+Claude Code is powerful, but a single session has limits: context windows overflow, decisions get forgotten, quality drifts without review. Asking one session to be strategist, architect, coder, and reviewer simultaneously leads to unfocused output.
+
+**AI Team Framework solves this by separation of concerns:**
+
+| Role | Responsibility | Writes to |
+|------|---------------|-----------|
+| **Project Director** | Strategy, priorities, milestones | `DIRECTIVES/`, `PROJECT_STATUS.md` |
+| **Development Director** | Architecture, task breakdown, code review | `TODO.md`, `DECISIONS.md` |
+| **Development Team** | Implementation, testing, reporting | Source code, `REPORTS/` |
+| **Documentation Optimizer** | Token management, archival, knowledge retrieval | `ARCHIVE/`, `OPTIMIZATION_LOG.md` |
+
+Each role is a separate Claude Code session that reads specific documents, does its job, and writes results — with no memory between sessions. Documents carry all state.
+
+---
+
+## Key Features
+
+### Autonomous AI Orchestration
+- **4 specialized roles** with strict separation of concerns — no role can step outside its authority
+- **Document-driven communication** — roles talk through markdown files, creating a complete audit trail
+- **Stateless sessions** — every session starts fresh from documents, eliminating context drift
+- **Decision authority matrix** — clear rules for who decides what (strategic vs. technical vs. trivial)
+
+### Interactive Setup Wizard
+- **19-question guided setup** — walks you through project configuration one question at a time
+- **Generates 9-12 customized files** — role definitions, state files, format references, launcher script
+- **Tech-stack-aware defaults** — suggests conventions based on your language and framework
+- **Configurable autonomy** — choose how much control you keep vs. delegate to AI roles
+
+### Context Protection & Token Economy
+- **DD never runs full test suites** — delegates heavy operations to Team sessions, preserving context for decisions
+- **Concrete document size thresholds** — DO monitors line counts and triggers optimization before sessions get expensive
+- **Operational knowledge preservation** — lessons learned are extracted as guidelines before archiving, so the team gets smarter over time
+- **Cumulative token savings tracking** — DO reports exact savings after each optimization pass
+
+### Worktree-Based Parallel Implementation
+- **Git worktree delegation** — DD can assign phases to isolated worktrees for parallel development
+- **Surgical merge protocol** — never copy whole files; review diffs, cherry-pick hunks, verify no leaks
+- **Agent regression checklist** — DD scans for hardcoded values, duplicated logic, loose assertions, scope creep
+
+### Documentation Lifecycle Management
+- **Archive-never-delete philosophy** — completed work moves to searchable archive, never lost
+- **Knowledge retrieval service** — any role can request past decisions or reports through the dispatcher
+- **Automatic archive indexing** — every archived item is indexed by type, date, and summary
+
+### Framework Updates
+- **Version-aware update system** — pull new framework version, run update script, get regenerated role definitions
+- **Smart preservation** — stateful files (decisions, status, TODO) are never touched; only role definitions are regenerated
+- **Full backup + rollback** — backup created before every update, one-command restore if needed
 
 ---
 
 ## How It Works
 
 ```
-Project Director        Development Director        Development Team
-(strategic brain)       (technical brain)            (implementation)
-     │                        │                           │
-     │ writes DIRECTIVES/     │ writes TODO.md            │ writes code
-     │                        │ writes DECISIONS.md       │ writes REPORTS/
-     │                        │                           │ checks TODO boxes
-     ▼                        ▼                           ▼
- ┌──────────────────────────────────────────────────────────┐
- │              Documents (the source of truth)             │
- └──────────────────────────────────────────────────────────┘
-                          ▲           │
-                          │           │ optimizes + archives
-                    You (dispatcher)  ▼
-              start sessions,   Doc Optimizer (optional)
-              carry context     (knowledge curator)
+┌─────────────┐    DIRECTIVES/    ┌─────────────────┐     TODO.md      ┌──────────────┐
+│   Project    │ ───────────────► │   Development    │ ──────────────► │  Development  │
+│   Director   │                  │    Director      │                  │     Team      │
+│  (strategy)  │ ◄─────────────── │  (architecture)  │ ◄────────────── │   (code)      │
+└─────────────┘  PROJECT_STATUS   └─────────────────┘    REPORTS/      └──────────────┘
+                                         │
+                                         │ reviews via
+                                         │ DECISIONS.md
+                                         ▼
+                                  ┌──────────────────────────────────────────────┐
+                                  │         Documents (source of truth)          │
+                                  └──────────────────────────────────────────────┘
+                                         ▲                    │
+                                   reads │                    │ optimizes + archives
+                                         │                    ▼
+                                    You (dispatcher)    Doc Optimizer
+                                    start sessions,     (knowledge curator,
+                                    carry context       optional)
 ```
 
-Each role:
-- Reads specific documents at session start (its "startup protocol")
-- Does its job (issue directives / create tasks / implement code)
-- Writes results to specific documents
-- Has NO memory between sessions — documents carry all state
+### The Cycle
+
+```
+1. PD session   →  Reviews state, issues directive         (./start_role.sh pd)
+2. DD session   →  Reads directive, creates TODO tasks     (./start_role.sh dd)
+3. Team session →  Implements, writes report               (./start_role.sh team)
+4. DD session   →  Reviews report, issues verdict          (./start_role.sh dd)
+5. PD session   →  Updates status, decides next steps      (./start_role.sh pd)
+   └── Repeat
+*. DO session   →  Optimizes docs, archives completed      (./start_role.sh doc)
+```
+
+You (the human dispatcher) start each session and tell the role what happened since last time. Each role reads its documents and picks up where the previous session left off. You stay in full control — the AI team works for you, not the other way around.
 
 ---
 
 ## Prerequisites
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (Anthropic's CLI for Claude) installed and available as `claude`
+- **Linux** (tested on Ubuntu/Debian; should work on any Linux with bash)
+- [**Claude Code**](https://docs.anthropic.com/en/docs/claude-code) CLI installed and available as `claude`
 
 ---
 
-## Quick Start
+## Quick Start (5 Minutes)
 
 ### 1. Clone the framework
 
@@ -62,54 +126,23 @@ claude "$(cat /path/to/ai-team-framework/wizard/WIZARD.md)"
 Or use the launcher script:
 
 ```bash
-cd /path/to/your-project
 /path/to/ai-team-framework/scripts/start_role.sh wizard
 ```
 
-The Wizard asks about your project (name, tech stack, conventions, phases) and
-generates a complete `docs/TEAM/` directory with all role definitions and state files,
-including a `start_role.sh` launcher script in your project root.
+The Wizard asks 19 questions about your project — name, tech stack, conventions, phases, autonomy level, review strictness, CLI flags — then generates a complete `docs/TEAM/` directory with everything you need.
 
 ### 3. Start your first cycle
 
-Use the generated launcher script:
-
 ```bash
+chmod +x start_role.sh
 ./start_role.sh pd     # Start a Project Director session
-./start_role.sh dd     # Start a Development Director session
-./start_role.sh team   # Start a Development Team session
-./start_role.sh doc    # Start a Documentation Optimizer session (if enabled)
 ```
 
-Or start manually:
-
-```bash
-claude
-# Tell it: "Read docs/TEAM/PROJECT_DIRECTOR.md and follow the startup protocol"
-```
-
----
-
-## The Workflow Cycle
-
-```
-1. PD session   → Reviews state, issues directive
-2. DD session   → Reads directive, creates TODO tasks
-3. Team session → Implements, writes report
-4. DD session   → Reviews report, issues verdict (ACCEPTED / NEEDS_FIXES)
-5. PD session   → Updates status, decides next steps
-   └── Repeat
-*. DO session   → (periodically) Optimizes docs, archives completed work
-```
-
-You (the dispatcher) start each session and tell the role what happened since last
-time. Each role reads its documents and picks up where the previous session left off.
+The PD reviews the initial state and issues the first directive. From there, follow the cycle.
 
 ---
 
 ## What Gets Generated
-
-After the Wizard runs, your project has:
 
 ```
 your-project/
@@ -129,20 +162,20 @@ your-project/
 │   ├── OPTIMIZATION_LOG.md          # DO's permanent memory (if enabled)
 │   ├── ARCHIVE_INDEX.md             # Archive master index (if enabled)
 │   └── ARCHIVE/                     # Archived documents (if enabled)
-└── start_role.sh                    # Launcher script
+└── start_role.sh                    # Launcher script with your CLI flags
 ```
+
+Every file is customized for your project — your name, your tech stack, your conventions, your phases.
 
 ---
 
-## Key Concepts
+## Document Ownership Matrix
 
-### Document Ownership
-
-Each document has clear ownership — who writes what:
+No ambiguity about who writes what:
 
 | Document | PD | DD | Team | DO |
 |----------|-----|-----|------|-----|
-| DIRECTIVES/ | writes | reads | reads | archives completed |
+| DIRECTIVES/ | **writes** | reads | reads | archives completed |
 | PROJECT_STATUS.md §2 | reads | **writes** | reads | — |
 | PROJECT_STATUS.md §1,3-9 | **writes** | reads | reads | — |
 | DECISIONS.md | reads | **writes** | reads | optimizes completed |
@@ -153,24 +186,43 @@ Each document has clear ownership — who writes what:
 | ARCHIVE/ | reads | reads | reads | **writes** |
 | Source code | — | — | **writes** | — |
 
-### Status Lifecycle
+---
 
-**Directives:** `NEW` → `PROCESSED` → `COMPLETED`
+## Configuration Options
 
-**Reports:** `COMPLETED` / `PARTIAL` / `BLOCKED`
+The Wizard lets you tune the framework to your workflow:
 
-**Review verdicts:** `ACCEPTED` / `NEEDS_FIXES` / `REJECTED`
+| Setting | Options | Effect |
+|---------|---------|--------|
+| **Claude CLI flags** | Default / `--dangerously-skip-permissions` / Custom | Baked into `start_role.sh` |
+| **Autonomy level** | Strict / Moderate / High | How much DD can decide without PD |
+| **Review strictness** | Strict / Moderate / Lenient | How rigorous code reviews are |
+| **Dispatcher control** | Full / PD+DD / PD only | How many roles you run manually |
+| **Doc Optimizer** | Enabled / Disabled | Token management and archival system |
 
-**Phases:** `NOT_STARTED` / `IN_PROGRESS` / `COMPLETED` / `BLOCKED`
+Override CLI flags per session:
+```bash
+CLAUDE_FLAGS="--model claude-sonnet-4-6" ./start_role.sh team
+```
 
-### Decision Authority
+---
 
-| Decision Type | PD | DD | Team |
-|--------------|-----|-----|------|
-| Strategic (priorities, scope) | **Final** | Input | Proposal |
-| Technical (architecture, patterns) | Input | **Final** | Input |
-| Trivial (variable names) | — | — | **Final** |
-| Boundary (big scope changes) | Strategic | Technical | **Dispatcher decides** |
+## Updating an Existing Project
+
+When a new framework version is released:
+
+```bash
+cd /path/to/ai-team-framework
+git pull
+./scripts/update_project.sh /path/to/your-project
+```
+
+The update script:
+- Shows a disclaimer and requires confirmation (your project is in active use)
+- Creates a full backup to `.framework_backup_TIMESTAMP/`
+- Regenerates role definitions using new templates while preserving all project customizations
+- Never touches stateful files (PROJECT_STATUS.md, DECISIONS.md, TODO.md, ARCHITECTURE_VISION.md)
+- Reports what changed and how to rollback
 
 ---
 
@@ -180,9 +232,9 @@ Each document has clear ownership — who writes what:
 ai-team-framework/
 ├── README.md                            # This file
 ├── LICENSE                              # MIT
-├── .gitignore
+├── VERSION                              # Framework version
 ├── wizard/
-│   ├── WIZARD.md                        # Wizard system prompt
+│   ├── WIZARD.md                        # 19-question interactive setup
 │   └── WIZARD_CHECKLIST.md              # Generation completeness checklist
 ├── templates/                           # Annotated reference templates
 │   ├── PROJECT_DIRECTOR.md
@@ -194,18 +246,18 @@ ai-team-framework/
 │   ├── ARCHITECTURE_VISION.md
 │   ├── DIRECTIVE_TEMPLATE.md
 │   ├── REPORT_TEMPLATE.md
-│   ├── DOC_OPTIMIZER.md                 # DO role definition template
-│   ├── OPTIMIZATION_LOG.md              # Optimization log template
-│   └── ARCHIVE_INDEX.md                 # Archive index template
+│   ├── DOC_OPTIMIZER.md
+│   ├── OPTIMIZATION_LOG.md
+│   └── ARCHIVE_INDEX.md
 ├── scripts/
 │   ├── start_role.sh                    # Role launcher (pd|dd|team|doc|wizard|help)
-│   └── update_project.sh               # Project updater (framework version upgrades)
+│   └── update_project.sh               # Project updater for version upgrades
 ├── update/
 │   └── UPDATE_PROMPT.md                 # Update agent instructions
 └── docs/
     ├── GUIDE.md                         # Detailed user guide
     ├── ROLES_EXPLAINED.md               # Deep dive into each role
-    ├── COMMUNICATION_PROTOCOL.md        # How roles talk through documents
+    ├── COMMUNICATION_PROTOCOL.md        # How roles communicate through documents
     └── EXAMPLES.md                      # Full session cycle walkthrough
 ```
 
@@ -222,41 +274,9 @@ ai-team-framework/
 
 ---
 
-## Example
-
-The `docs/TEAM/` directory in this repo contains real files from the project where
-this framework was originally developed ([ai-software-swarm](https://github.com/dusankrstic-cpu/ai-software-swarm)).
-You can browse them to see what the Wizard generates in practice.
-
----
-
-## Updating an Existing Project
-
-When you pull a newer version of the framework, update your project's team files:
-
-```bash
-cd /path/to/ai-team-framework
-git pull
-
-# Update your project
-./scripts/update_project.sh /path/to/your-project
-```
-
-The update script:
-- Shows a disclaimer (your project is in active use — proceed at your own risk)
-- Creates a full backup before making changes
-- Uses Claude to intelligently regenerate role definitions with your project's customizations
-- Preserves all stateful files (PROJECT_STATUS.md, DECISIONS.md, TODO.md, etc.)
-- Reports what was changed and how to rollback
-
----
-
 ## Origin
 
-This framework was extracted from [ai-software-swarm](https://github.com/dusankrstic-cpu/ai-software-swarm),
-where it emerged organically during development. Three AI roles completed 7 phases
-(210 tests) in a single day with full traceability. The framework proved effective
-enough to extract into a standalone, project-agnostic tool.
+This framework was extracted from [ai-software-swarm](https://github.com/dusankrstic-cpu/ai-software-swarm), where it emerged organically during development. Three AI roles completed 7 phases (210 tests) in a single day with full traceability — every decision logged, every implementation reviewed, every report archived. The framework proved effective enough to extract into a standalone, project-agnostic orchestration tool.
 
 ---
 
