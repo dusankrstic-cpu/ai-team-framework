@@ -51,6 +51,11 @@ Each role is a separate Claude Code session that reads specific documents, does 
 - **Surgical merge protocol** — never copy whole files; review diffs, cherry-pick hunks, verify no leaks
 - **Agent regression checklist** — DD scans for hardcoded values, duplicated logic, loose assertions, scope creep
 
+### Document Validation
+- **Markdown linter** — validates TODO checkboxes, directive/report statuses, naming conventions, cross-references before role handoff
+- **Auto-fix mode** — removes trailing whitespace, adds missing final newlines
+- **Strict mode** — treats warnings as errors for CI integration
+
 ### Documentation Lifecycle Management
 - **Archive-never-delete philosophy** — completed work moves to searchable archive, never lost
 - **Knowledge retrieval service** — any role can request past decisions or reports through the dispatcher
@@ -269,6 +274,7 @@ ai-team-framework/
 ├── scripts/
 │   ├── start_role.sh                    # Role launcher (pd|dd|team|doc|wizard|help)
 │   ├── orchestrator.sh                  # Auto-orchestrator (status|suggest|auto)
+│   ├── lint_docs.sh                     # Document structure validator
 │   └── update_project.sh               # Project updater for version upgrades
 ├── update/
 │   └── UPDATE_PROMPT.md                 # Update agent instructions
