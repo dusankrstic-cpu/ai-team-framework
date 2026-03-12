@@ -71,7 +71,11 @@ your-project/
 │       ├── DIRECTIVE_TEMPLATE.md     # Format reference
 │       ├── REPORT_TEMPLATE.md        # Format reference
 │       ├── DIRECTIVES/               # PD's directives (empty)
-│       └── REPORTS/                  # Team's reports (empty)
+│       ├── REPORTS/                  # Team's reports (empty)
+│       ├── DOC_OPTIMIZER.md          # DO role definition (if enabled)
+│       ├── OPTIMIZATION_LOG.md       # DO's optimization memory (if enabled)
+│       ├── ARCHIVE_INDEX.md          # Archive index (if enabled)
+│       └── ARCHIVE/                  # Archived documents (if enabled)
 └── start_role.sh                     # Launcher script
 ```
 
@@ -84,6 +88,14 @@ conventions, your phases.
 ./start_role.sh pd      # Start Project Director
 ./start_role.sh dd      # Start Development Director
 ./start_role.sh team    # Start Development Team
+./start_role.sh doc     # Start Documentation Optimizer (if enabled)
+```
+
+The launcher script includes your Claude CLI flags (configured during wizard setup).
+To override flags for a single session:
+
+```bash
+CLAUDE_FLAGS="--model claude-sonnet-4-6" ./start_role.sh team
 ```
 
 ### Manual Session Start
@@ -132,6 +144,10 @@ Every development cycle follows this pattern:
 │     → Decides next direction                        │
 │     → Issues new directive or closes phase          │
 │                                                     │
+│  *. DO Session (periodically, if enabled)           │
+│     → Optimizes documentation, archives completed   │
+│     → Reports token savings                         │
+│                                                     │
 │  └─── Repeat ─────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────┘
 ```
@@ -161,6 +177,10 @@ Between sessions, you:
 **Starting Team:**
 > "Read docs/TEAM/DEVELOPMENT_TEAM.md. Phase 3 tasks are ready in TODO.md. Green
 > light to start."
+
+**Starting DO:**
+> "Read docs/TEAM/DOC_OPTIMIZER.md. Phases 1-3 are completed and accepted.
+> Optimize documentation and archive completed content."
 
 ---
 
@@ -207,7 +227,18 @@ The framework is a starting point. Common adaptations:
 | Exploratory/research phase | Relax review strictness, allow more autonomy |
 | Critical production system | Tighten review strictness, require explicit acceptance |
 
-### 6. Phase 0 Matters
+### 6. Run the Documentation Optimizer Periodically
+
+If you enabled the DO role, run it after every 3-5 completed phases or when you
+notice sessions getting slower/more expensive. The DO will:
+- Compress completed phase content in TODO.md and DECISIONS.md
+- Archive old directives and reports
+- Report token savings
+- Keep the archive searchable via ARCHIVE_INDEX.md
+
+This keeps session costs manageable as the project grows.
+
+### 7. Phase 0 Matters
 
 Don't skip Phase 0 (Setup and Framework). It verifies that:
 - The project structure exists
@@ -261,6 +292,57 @@ You can speed things up by:
 
 ---
 
+## Updating the Framework
+
+When a new version of the AI Team Framework is released:
+
+### Step 1: Pull the latest framework
+
+```bash
+cd /path/to/ai-team-framework
+git pull
+```
+
+### Step 2: Run the update script
+
+```bash
+./scripts/update_project.sh /path/to/your-project
+```
+
+### What Happens
+
+1. **Disclaimer** — You'll see a warning explaining that your project is in active use.
+   You must confirm to proceed.
+
+2. **Backup** — All team files are backed up to `.framework_backup_TIMESTAMP/`
+
+3. **Update** — Claude reads your existing files, extracts all project-specific
+   customizations, and regenerates role definitions using the new templates.
+
+4. **Report** — You'll see exactly what was updated and what was preserved.
+
+### What Gets Updated vs. Preserved
+
+| Updated (regenerated) | Preserved (untouched) |
+|----------------------|----------------------|
+| Role definitions (PD/DD/Team/DO .md) | PROJECT_STATUS.md |
+| Format references | DECISIONS.md |
+| start_role.sh | TODO.md |
+| | ARCHITECTURE_VISION.md |
+| | DIRECTIVES/, REPORTS/, ARCHIVE/ |
+| | Source code and tests |
+
+### Rollback
+
+If something goes wrong, restore from the backup:
+
+```bash
+cp -r .framework_backup_TIMESTAMP/TEAM/* docs/TEAM/
+cp .framework_backup_TIMESTAMP/start_role.sh ./start_role.sh
+```
+
+---
+
 ## Directory Layout Reference
 
 ```
@@ -277,7 +359,14 @@ docs/TEAM/
 ├── DIRECTIVES/
 │   ├── DIRECTIVE_2026-03-01_auth.md
 │   └── DIRECTIVE_2026-03-05_api.md
-└── REPORTS/
-    ├── REPORT_2026-03-02_PHASE-1.md
-    └── REPORT_2026-03-04_PHASE-2.md
+├── REPORTS/
+│   ├── REPORT_2026-03-02_PHASE-1.md
+│   └── REPORT_2026-03-04_PHASE-2.md
+├── DOC_OPTIMIZER.md                 # DO role definition (if enabled)
+├── OPTIMIZATION_LOG.md              # DO's permanent memory (if enabled)
+├── ARCHIVE_INDEX.md                 # Archive master index (if enabled)
+└── ARCHIVE/                         # Archived content (if enabled)
+    ├── DIRECTIVES/                  # Archived completed directives
+    ├── REPORTS/                     # Archived old reports
+    └── DECISIONS/                   # Archived decision batches
 ```

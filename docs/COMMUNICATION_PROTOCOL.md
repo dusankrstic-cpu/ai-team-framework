@@ -1,6 +1,6 @@
 # Communication Protocol
 
-How the three AI roles communicate through documents, with a human dispatcher
+How the AI roles communicate through documents, with a human dispatcher
 carrying context between sessions.
 
 ---
@@ -61,23 +61,42 @@ miscommunication, and allow any session to pick up where the last one left off.
            REPORTS/        │
            code + tests    │
            TODO checkboxes │
+
+
+                    ┌─────────────────────┐
+                    │  Doc Optimizer (DO)  │
+                    │  (knowledge curator) │
+                    └──────┬──────────▲───┘
+                           │          │
+              writes       │          │ reads ALL
+           ARCHIVE/        │          │ documents
+           OPT_LOG         │          │
+                           ▼          │
+                    ┌──────────────────┘──┐
+                    │     Dispatcher      │
+                    │   (invokes DO       │
+                    │    periodically)    │
+                    └────────────────────┘
 ```
 
 ---
 
 ## Document Ownership Matrix
 
-| Document | PD Writes | DD Writes | Team Writes | Everyone Reads |
-|----------|-----------|-----------|-------------|----------------|
-| `DIRECTIVES/` | Yes | — | — | Yes |
-| `PROJECT_STATUS.md` §1,3-9 | Yes | — | — | Yes |
-| `PROJECT_STATUS.md` §2 | — | Yes | — | Yes |
-| `DECISIONS.md` | — | Yes | — | Yes |
-| `TODO.md` (text) | — | Yes | — | Yes |
-| `TODO.md` (checkboxes) | — | — | Yes | Yes |
-| `REPORTS/` | — | — | Yes | Yes |
-| `ARCHITECTURE_VISION.md` | Co-approves changes | Proposes changes | — | Yes |
-| Source code | — | — | Yes | — |
+| Document | PD Writes | DD Writes | Team Writes | DO Writes | Everyone Reads |
+|----------|-----------|-----------|-------------|-----------|----------------|
+| `DIRECTIVES/` | Yes | — | — | Archives COMPLETED | Yes |
+| `PROJECT_STATUS.md` §1,3-9 | Yes | — | — | — | Yes |
+| `PROJECT_STATUS.md` §2 | — | Yes | — | — | Yes |
+| `DECISIONS.md` | — | Yes | — | Optimizes completed | Yes |
+| `TODO.md` (text) | — | Yes | — | Optimizes completed | Yes |
+| `TODO.md` (checkboxes) | — | — | Yes | — | Yes |
+| `REPORTS/` | — | — | Yes | Archives completed | Yes |
+| `ARCHITECTURE_VISION.md` | Co-approves changes | Proposes changes | — | — | Yes |
+| `OPTIMIZATION_LOG.md` | — | — | — | Yes | Yes |
+| `ARCHIVE_INDEX.md` | — | — | — | Yes | Yes |
+| `ARCHIVE/` | — | — | — | Yes | Yes |
+| Source code | — | — | Yes | — | — |
 
 ---
 
@@ -148,6 +167,32 @@ miscommunication, and allow any session to pick up where the last one left off.
 
 **No role directly overrides another's documents.** Disagreements are resolved through the dispatcher.
 
+### Pattern 6: Documentation Optimization Cycle
+
+**When:** Multiple phases have completed, documents are growing large, or dispatcher notices sessions are getting expensive
+
+**Flow:**
+1. Dispatcher starts DO session: "Optimize documentation, archive completed phases"
+2. DO scans all documents, reports current sizes and optimization opportunities
+3. DO compresses completed phase content, archives old directives/reports
+4. DO updates ARCHIVE_INDEX.md and OPTIMIZATION_LOG.md
+5. DO reports token savings to dispatcher
+
+**Documents touched:** OPTIMIZATION_LOG.md (DO writes), ARCHIVE_INDEX.md (DO writes), ARCHIVE/ (DO writes), TODO.md (DO optimizes completed phases), DECISIONS.md (DO optimizes completed phases), DIRECTIVES/ (DO archives COMPLETED), REPORTS/ (DO archives completed)
+
+### Pattern 7: Archive Knowledge Retrieval
+
+**When:** Any role needs information that may have been archived
+
+**Flow:**
+1. Role notes retrieval need in its output document (PD: strategic log, DD: DECISIONS.md, Team: report "Open Questions")
+2. Dispatcher starts DO session with search query
+3. DO searches ARCHIVE_INDEX.md and archive files
+4. DO writes results to `ARCHIVE/RETRIEVAL_RESPONSE.md`
+5. Dispatcher carries results to requesting role
+
+**Documents touched:** ARCHIVE/RETRIEVAL_RESPONSE.md (DO writes), OPTIMIZATION_LOG.md (DO logs retrieval)
+
 ---
 
 ## The Dispatcher's Role
@@ -177,6 +222,11 @@ You (the human) are essential to this system. You:
 - "DD reviewed your report — verdict: NEEDS_FIXES, see DECISIONS.md"
 - "Green light to start Phase N"
 
+**When starting DO:**
+- "Phases 1-3 are completed and accepted. Optimize documentation and archive."
+- "Team needs info about the Phase 1 storage decision. Search the archive."
+- "Documents are getting large — please do a cleanup pass."
+
 ---
 
 ## Session Continuity
@@ -201,3 +251,6 @@ The strategic log (PROJECT_STATUS.md §8) and technical decisions (DECISIONS.md)
 | Skipping reports | DD can't review, PD can't track | Every implementation session ends with a report |
 | Direct role-to-role communication | Breaks the audit trail | Always go through documents + dispatcher |
 | Roles reading files they don't own | Fine — reading is always OK | Reading is encouraged! Only writing is restricted |
+| DO modifies active phase content | Disrupts ongoing work | DO only optimizes COMPLETED + ACCEPTED phase content |
+| DO deletes instead of archiving | Permanent knowledge loss | Always archive, never delete |
+| Roles bypass dispatcher for archive retrieval | Breaks audit trail | Request through documents + dispatcher |

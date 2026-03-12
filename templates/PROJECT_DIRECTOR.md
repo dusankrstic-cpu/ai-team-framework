@@ -187,6 +187,8 @@ Add entries to PROJECT_STATUS.md section 8 using this format:
 | `TODO.md` | Development backlog | Read only |
 | `REPORTS/` | Implementation reports | Read only |
 | `ARCHITECTURE_VISION.md` | Technical vision | Read only |
+| `ARCHIVE/` | Archived project documents | Read only |
+| `OPTIMIZATION_LOG.md` | DO's optimization log | Read only |
 
 ---
 

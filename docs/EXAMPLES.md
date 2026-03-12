@@ -400,3 +400,84 @@ framework) completed 7 phases in a single day:
 ```
 
 The framework doesn't slow you down — it keeps you organized while moving fast.
+
+---
+
+## Example: Documentation Optimization Session
+
+After completing 3 phases, Alex notices sessions are getting slower — documents have
+grown significantly.
+
+**Alex starts a DO session:**
+
+```
+"Read docs/TEAM/DOC_OPTIMIZER.md. Phases 1-3 are all COMPLETED and ACCEPTED.
+Please optimize documentation and archive completed phase content."
+```
+
+**DO reads all documents, then:**
+
+1. Scans document sizes:
+   - TODO.md: 180 lines (90 lines are completed Phase 1-3 tasks)
+   - DECISIONS.md: 95 lines (40 lines are Phase 1-3 decisions/reviews)
+   - DIRECTIVES/: 3 completed directive files
+   - REPORTS/: 4 report files (including 1 revision)
+
+2. Archives completed directives and reports to ARCHIVE/
+
+3. Compresses completed TODO phases:
+   - Before: 90 lines of checked-off Phase 1-3 tasks
+   - After: 12-line summary per phase (36 lines total)
+
+4. Extracts old DECISIONS.md entries to archive, leaves summary pointers
+
+5. Logs everything in OPTIMIZATION_LOG.md:
+
+```markdown
+### 2026-03-05 — OPTIMIZATION
+
+**Context:** Phases 1-3 completed. TODO.md had 90 lines of completed tasks.
+**Action:** Compressed completed phases to summaries. Archived 3 directives, 4 reports.
+**Impact:** TODO.md: 180 → 126 lines. DECISIONS.md: 95 → 67 lines. Archived: 7 files.
+```
+
+6. Reports to dispatcher:
+   - "Archived 7 files. Reduced active document size by ~30%. Details in OPTIMIZATION_LOG.md."
+
+---
+
+## Example: Archive Knowledge Retrieval
+
+During Phase 5, the Team needs to remember a technical decision from Phase 1.
+
+**In the report:** "Open Questions: What was the rationale for using atomic writes
+in the storage layer? This was decided in Phase 1 but the DECISIONS.md entry
+was compressed."
+
+**Alex starts a DO session:**
+
+```
+"Read docs/TEAM/DOC_OPTIMIZER.md. The Team needs the Phase 1 decision about
+atomic writes in storage. Please search the archive."
+```
+
+**DO searches ARCHIVE_INDEX.md, finds the entry, writes:**
+
+**`ARCHIVE/RETRIEVAL_RESPONSE.md`:**
+
+```markdown
+# Retrieval Response
+
+**Requested by:** Development Team (via report)
+**Query:** Rationale for atomic writes in storage layer
+**Found in:** ARCHIVE/DECISIONS/DECISIONS_PHASE-1-3.md
+
+**Result:**
+> ### 2026-03-01 — DECISION
+> **Context:** PD directive requests core data model with JSON storage.
+> **Decision:** Use atomic writes (write to temp file, then rename).
+> **Rationale:** Prevents data corruption if process crashes mid-write.
+>     Atomic rename is guaranteed by POSIX on same filesystem.
+```
+
+**Alex tells the Team:** "DO found the answer — check ARCHIVE/RETRIEVAL_RESPONSE.md."

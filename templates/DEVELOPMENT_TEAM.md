@@ -242,6 +242,7 @@ After completing work, create a report in `REPORTS/` following this structure:
 | `REPORTS/` | Your implementation reports | Write |
 | Source code files | Your implementation | Read + Write |
 | Test files | Your tests | Read + Write |
+| `ARCHIVE/` | Archived content | Read only (via DO retrieval) |
 
 ---
 

@@ -100,6 +100,7 @@ Phase 0 ──► Phase 1 ──► Phase 2 ──► ...
 | **Project Director** | Strategic authority — vision, priorities, scope |
 | **Development Director** | Technical authority — architecture, reviews, task management |
 | **Development Team** | Implementation — code, tests, reports |
+| **Documentation Optimizer** | Knowledge curator — documentation cleanup, archival, retrieval |
 
 ---
 
@@ -130,3 +131,7 @@ Phase 0 ──► Phase 1 ──► Phase 2 ──► ...
 | `ARCHITECTURE_VISION.md` | Technical vision |
 | `DIRECTIVES/` | PD's strategic directives |
 | `REPORTS/` | Team's implementation reports |
+| `DOC_OPTIMIZER.md` | DO role definition |
+| `OPTIMIZATION_LOG.md` | Optimization log (DO writes) |
+| `ARCHIVE_INDEX.md` | Archive index (DO writes) |
+| `ARCHIVE/` | Archived documents (DO manages) |

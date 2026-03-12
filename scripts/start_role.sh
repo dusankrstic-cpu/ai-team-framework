@@ -2,7 +2,7 @@
 # AI Team Framework — Role Launcher
 #
 # Usage: ./start_role.sh <role> [options]
-#   role: pd | dd | team | wizard
+#   role: pd | dd | team | doc | wizard
 #
 # This is the TEMPLATE version. The Wizard generates a project-specific
 # version in the user's project root.
@@ -11,6 +11,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TEAM_DIR="${TEAM_DIR:-docs/TEAM}"
+CLAUDE_FLAGS="${CLAUDE_FLAGS:-}"
 ROLE="${1:-}"
 
 # Check if Claude CLI is available
@@ -48,6 +49,9 @@ show_help() {
     echo "  team    Development Team — implementation"
     echo "          Writes code, tests, and reports."
     echo ""
+    echo "  doc     Documentation Optimizer — documentation cleanup, archival, retrieval"
+    echo "          Keeps docs lean, archives completed work, finds past knowledge."
+    echo ""
     echo "  wizard  Initialization Wizard"
     echo "          Asks about your project and generates all team files."
     echo "          (Requires FRAMEWORK_DIR to be set or script to be in framework repo)"
@@ -60,10 +64,16 @@ show_help() {
     echo "  3. $0 team   → Team implements, writes report"
     echo "  4. $0 dd     → DD reviews report, issues verdict"
     echo "  5. $0 pd     → PD updates status, next steps"
+    echo "  *. $0 doc    → (periodically) Optimize docs, archive completed work"
     echo ""
     echo "Environment:"
     echo "  TEAM_DIR       Path to team files (default: docs/TEAM)"
     echo "  FRAMEWORK_DIR  Path to ai-team-framework repo (for wizard)"
+    echo "  CLAUDE_FLAGS   Extra flags for claude CLI (e.g., --dangerously-skip-permissions)"
+    echo ""
+    echo "Update:"
+    echo "  To update framework files to a new version:"
+    echo "  /path/to/ai-team-framework/scripts/update_project.sh [project_path]"
 }
 
 start_session() {
@@ -85,7 +95,8 @@ start_session() {
     echo ""
 
     # Start Claude interactively with the role file content as initial prompt
-    claude "$(cat "$role_file")"
+    # shellcheck disable=SC2086
+    claude $CLAUDE_FLAGS "$(cat "$role_file")"
 }
 
 case "$ROLE" in
@@ -101,6 +112,10 @@ case "$ROLE" in
         check_team_dir
         start_session "$TEAM_DIR/DEVELOPMENT_TEAM.md" "Development Team"
         ;;
+    doc|optimizer|doc-optimizer)
+        check_team_dir
+        start_session "$TEAM_DIR/DOC_OPTIMIZER.md" "Documentation Optimizer"
+        ;;
     wizard)
         FRAMEWORK_DIR="${FRAMEWORK_DIR:-$SCRIPT_DIR/..}"
         WIZARD_FILE="$FRAMEWORK_DIR/wizard/WIZARD.md"
@@ -113,7 +128,8 @@ case "$ROLE" in
         echo "  Starting: Initialization Wizard"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo ""
-        claude "$(cat "$WIZARD_FILE")"
+        # shellcheck disable=SC2086
+        claude $CLAUDE_FLAGS "$(cat "$WIZARD_FILE")"
         ;;
     help|--help|-h)
         show_help

@@ -259,6 +259,8 @@ This is your **permanent technical memory**. Every new session starts by reading
 | `DIRECTIVES/` | PD's strategic directives | Read only |
 | `REPORTS/` | Team's implementation reports | Read only |
 | `ARCHITECTURE_VISION.md` | Technical vision | Read (propose changes via DECISIONS.md) |
+| `ARCHIVE/` | Archived decisions/reports | Read only |
+| `OPTIMIZATION_LOG.md` | DO's optimization log | Read only |
 
 ---
 

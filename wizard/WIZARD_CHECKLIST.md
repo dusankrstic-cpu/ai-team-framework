@@ -10,7 +10,7 @@ The Wizard uses this as a self-check before declaring initialization complete.
 The Wizard generates all files inside `docs/TEAM/` in the user's project directory,
 plus a launcher script.
 
-### Role Definitions (3 files)
+### Role Definitions (3-4 files)
 
 - [ ] `docs/TEAM/PROJECT_DIRECTOR.md` — Fully customized PD role definition
   - Project name, owner name filled in
@@ -31,7 +31,13 @@ plus a launcher script.
   - All `[placeholder]` values replaced
   - No `<!-- WIZARD: -->` comments remain
 
-### State Files (4 files)
+- [ ] `docs/TEAM/DOC_OPTIMIZER.md` — Fully customized DO role definition (**if DO enabled**)
+  - Project name, owner name filled in
+  - Optimization rules and safety constraints present
+  - All `[placeholder]` values replaced
+  - No `<!-- WIZARD: -->` comments remain
+
+### State Files (4-6 files)
 
 - [ ] `docs/TEAM/PROJECT_STATUS.md` — Initialized project status
   - Section 1 has real project info
@@ -54,21 +60,41 @@ plus a launcher script.
   - Module structure reflects actual project layout
   - Principles derived from user's preferences
 
+- [ ] `docs/TEAM/OPTIMIZATION_LOG.md` — Initialized optimization log (**if DO enabled**)
+  - Project name in header
+  - Empty log section ready for entries
+
+- [ ] `docs/TEAM/ARCHIVE_INDEX.md` — Initialized archive index (**if DO enabled**)
+  - Empty tables ready for entries
+  - Retrieval instructions present
+
 ### Format References (2 files)
 
 - [ ] `docs/TEAM/DIRECTIVE_TEMPLATE.md` — Copied as-is from framework templates
 - [ ] `docs/TEAM/REPORT_TEMPLATE.md` — Copied as-is from framework templates
 
-### Directories (2 directories)
+### Directories (2-5 directories)
 
 - [ ] `docs/TEAM/DIRECTIVES/` — Created (empty, ready for PD)
 - [ ] `docs/TEAM/REPORTS/` — Created (empty, ready for Team)
+- [ ] `docs/TEAM/ARCHIVE/` — Created (empty, ready for DO) (**if DO enabled**)
+- [ ] `docs/TEAM/ARCHIVE/DIRECTIVES/` — For archived directives (**if DO enabled**)
+- [ ] `docs/TEAM/ARCHIVE/REPORTS/` — For archived reports (**if DO enabled**)
+- [ ] `docs/TEAM/ARCHIVE/DECISIONS/` — For archived decision batches (**if DO enabled**)
 
 ### Launcher Script (1 file)
 
 - [ ] `start_role.sh` — Parameterized script in project root
-  - Accepts role argument (pd / dd / team)
+  - Accepts role argument (pd / dd / team / doc)
   - Loads correct role file into Claude Code session
+  - Includes `doc` case if DO enabled
+  - `CLAUDE_FLAGS` set correctly based on user's CLI launch preference
+  - No `<FLAGS_FROM_QUESTION_2>` placeholder remains
+
+### Version Marker (1 file)
+
+- [ ] `docs/TEAM/.framework_version` — Contains framework version number
+  - Read from `VERSION` file in framework repo, or `2.0.0` as default
   - Executable (`chmod +x`) instruction present
 
 ---
@@ -95,6 +121,7 @@ The Wizard must have answers to all of these before generating:
 
 ### Phase 1 — Project Basics
 - [ ] Communication language
+- [ ] Claude CLI launch flags (default / skip-permissions / custom)
 - [ ] Project name
 - [ ] Project description (1-2 paragraphs)
 - [ ] Tech stack (languages, frameworks, key dependencies)
@@ -117,3 +144,6 @@ The Wizard must have answers to all of these before generating:
 - [ ] Naming conventions (files, classes, functions, variables, constants)
 - [ ] Branch strategy and commit conventions
 - [ ] Any special rules or constraints
+
+### Phase 5 — Documentation Optimizer
+- [ ] DO enablement (yes / no)

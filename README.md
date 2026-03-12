@@ -1,9 +1,10 @@
 # AI Team Framework
 
 A file-based framework for managing software projects with multiple AI roles.
-Built for **Claude Code** (Anthropic's CLI for Claude). Three specialized Claude
-sessions — **Project Director**, **Development Director**, and **Development Team** —
-collaborate through markdown documents, with a human dispatcher coordinating between them.
+Built for **Claude Code** (Anthropic's CLI for Claude). Specialized Claude sessions —
+**Project Director**, **Development Director**, **Development Team**, and optionally
+**Documentation Optimizer** — collaborate through markdown documents, with a human
+dispatcher coordinating between them.
 
 No server, no database, just markdown files and conventions.
 
@@ -22,10 +23,11 @@ Project Director        Development Director        Development Team
  ┌──────────────────────────────────────────────────────────┐
  │              Documents (the source of truth)             │
  └──────────────────────────────────────────────────────────┘
-                          ▲
-                          │
-                    You (dispatcher)
-              start sessions, carry context
+                          ▲           │
+                          │           │ optimizes + archives
+                    You (dispatcher)  ▼
+              start sessions,   Doc Optimizer (optional)
+              carry context     (knowledge curator)
 ```
 
 Each role:
@@ -76,6 +78,7 @@ Use the generated launcher script:
 ./start_role.sh pd     # Start a Project Director session
 ./start_role.sh dd     # Start a Development Director session
 ./start_role.sh team   # Start a Development Team session
+./start_role.sh doc    # Start a Documentation Optimizer session (if enabled)
 ```
 
 Or start manually:
@@ -96,6 +99,7 @@ claude
 4. DD session   → Reviews report, issues verdict (ACCEPTED / NEEDS_FIXES)
 5. PD session   → Updates status, decides next steps
    └── Repeat
+*. DO session   → (periodically) Optimizes docs, archives completed work
 ```
 
 You (the dispatcher) start each session and tell the role what happened since last
@@ -120,7 +124,11 @@ your-project/
 │   ├── DIRECTIVE_TEMPLATE.md        # Format reference
 │   ├── REPORT_TEMPLATE.md           # Format reference
 │   ├── DIRECTIVES/                  # PD's strategic directives
-│   └── REPORTS/                     # Team's implementation reports
+│   ├── REPORTS/                     # Team's implementation reports
+│   ├── DOC_OPTIMIZER.md             # DO role definition (if enabled)
+│   ├── OPTIMIZATION_LOG.md          # DO's permanent memory (if enabled)
+│   ├── ARCHIVE_INDEX.md             # Archive master index (if enabled)
+│   └── ARCHIVE/                     # Archived documents (if enabled)
 └── start_role.sh                    # Launcher script
 ```
 
@@ -132,16 +140,18 @@ your-project/
 
 Each document has clear ownership — who writes what:
 
-| Document | PD | DD | Team |
-|----------|-----|-----|------|
-| DIRECTIVES/ | writes | reads | reads |
-| PROJECT_STATUS.md §2 | reads | **writes** | reads |
-| PROJECT_STATUS.md §1,3-9 | **writes** | reads | reads |
-| DECISIONS.md | reads | **writes** | reads |
-| TODO.md (text) | reads | **writes** | reads |
-| TODO.md (checkboxes) | reads | reads | **writes** |
-| REPORTS/ | reads | reads | **writes** |
-| Source code | — | — | **writes** |
+| Document | PD | DD | Team | DO |
+|----------|-----|-----|------|-----|
+| DIRECTIVES/ | writes | reads | reads | archives completed |
+| PROJECT_STATUS.md §2 | reads | **writes** | reads | — |
+| PROJECT_STATUS.md §1,3-9 | **writes** | reads | reads | — |
+| DECISIONS.md | reads | **writes** | reads | optimizes completed |
+| TODO.md (text) | reads | **writes** | reads | optimizes completed |
+| TODO.md (checkboxes) | reads | reads | **writes** | — |
+| REPORTS/ | reads | reads | **writes** | archives completed |
+| OPTIMIZATION_LOG.md | reads | reads | — | **writes** |
+| ARCHIVE/ | reads | reads | reads | **writes** |
+| Source code | — | — | **writes** | — |
 
 ### Status Lifecycle
 
@@ -183,9 +193,15 @@ ai-team-framework/
 │   ├── TODO.md
 │   ├── ARCHITECTURE_VISION.md
 │   ├── DIRECTIVE_TEMPLATE.md
-│   └── REPORT_TEMPLATE.md
+│   ├── REPORT_TEMPLATE.md
+│   ├── DOC_OPTIMIZER.md                 # DO role definition template
+│   ├── OPTIMIZATION_LOG.md              # Optimization log template
+│   └── ARCHIVE_INDEX.md                 # Archive index template
 ├── scripts/
-│   └── start_role.sh                    # Role launcher (pd|dd|team|wizard|help)
+│   ├── start_role.sh                    # Role launcher (pd|dd|team|doc|wizard|help)
+│   └── update_project.sh               # Project updater (framework version upgrades)
+├── update/
+│   └── UPDATE_PROMPT.md                 # Update agent instructions
 └── docs/
     ├── GUIDE.md                         # Detailed user guide
     ├── ROLES_EXPLAINED.md               # Deep dive into each role
@@ -211,6 +227,27 @@ ai-team-framework/
 The `docs/TEAM/` directory in this repo contains real files from the project where
 this framework was originally developed ([ai-software-swarm](https://github.com/dusankrstic-cpu/ai-software-swarm)).
 You can browse them to see what the Wizard generates in practice.
+
+---
+
+## Updating an Existing Project
+
+When you pull a newer version of the framework, update your project's team files:
+
+```bash
+cd /path/to/ai-team-framework
+git pull
+
+# Update your project
+./scripts/update_project.sh /path/to/your-project
+```
+
+The update script:
+- Shows a disclaimer (your project is in active use — proceed at your own risk)
+- Creates a full backup before making changes
+- Uses Claude to intelligently regenerate role definitions with your project's customizations
+- Preserves all stateful files (PROJECT_STATUS.md, DECISIONS.md, TODO.md, etc.)
+- Reports what was changed and how to rollback
 
 ---
 

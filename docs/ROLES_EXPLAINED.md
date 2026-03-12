@@ -5,13 +5,13 @@ and how they interact.
 
 ---
 
-## Why Three Roles?
+## Why Specialized Roles?
 
 A single AI session trying to be strategist, architect, and implementer simultaneously
 tends to lose focus. It optimizes for the immediate coding task and forgets the bigger
 picture. Or it over-plans and never ships.
 
-Three specialized roles solve this:
+Specialized roles solve this:
 
 | Problem | Solution |
 |---------|---------|
@@ -20,6 +20,8 @@ Three specialized roles solve this:
 | "Nobody reviewed this before merging" | DD reviews every implementation report |
 | "We lost track of what's done" | PD maintains strategic status |
 | "Sessions don't remember previous decisions" | DECISIONS.md is permanent memory |
+| "Documents keep growing, sessions cost too much" | Documentation Optimizer manages token budget |
+| "Where was that old decision from Phase 1?" | DO's archive is the knowledge base |
 
 ---
 
@@ -187,6 +189,69 @@ Read TODO.md (work orders)
 
 ---
 
+## The Documentation Optimizer (Optional)
+
+### Identity
+
+The curator. Keeps documentation lean, archives completed work, and serves as the
+team's knowledge retrieval system. Runs periodically — not part of every cycle.
+
+### Core Loop
+
+```
+Read current document state
+  → Identify optimization opportunities
+  → Compress completed phase content
+  → Archive old directives and reports
+  → Update ARCHIVE_INDEX.md
+  → Log actions in OPTIMIZATION_LOG.md
+  → Report token savings
+```
+
+### What "Good DO Work" Looks Like
+
+- Documents get shorter without losing information
+- Completed directives and reports are archived, not cluttering active dirs
+- ARCHIVE_INDEX.md makes finding old info fast
+- Other roles never lose access to anything they need
+- Token savings are measurable and reported
+
+### When to Start a DO Session
+
+- After 3+ phases are completed (documents start growing)
+- When sessions feel slow or expensive (large context)
+- When a role needs archived information (retrieval request)
+- Periodically as preventive maintenance
+
+### DO Writes To
+
+| Document | Sections | Purpose |
+|----------|----------|---------|
+| `OPTIMIZATION_LOG.md` | Full file | Permanent optimization memory |
+| `ARCHIVE_INDEX.md` | Full file | Archive master index |
+| `ARCHIVE/` | Full directory | Archived content |
+| `ARCHIVE/RETRIEVAL_RESPONSE.md` | Full file | Knowledge retrieval results |
+
+### DO Reads
+
+Everything. DO has read access to all documents for full visibility.
+
+### The DO's Secret Weapon: ARCHIVE_INDEX.md
+
+ARCHIVE_INDEX.md is the master index of everything that's been archived. When any role
+needs past information, the DO searches this index first, then dives into specific
+archive files. A well-maintained index means instant retrieval.
+
+### Safety Constraints
+
+The DO has strict rules about what it can and cannot touch:
+- **ONLY** optimizes content related to COMPLETED + ACCEPTED phases
+- **NEVER** touches active (IN_PROGRESS) content or role definitions
+- **NEVER** deletes — always archives
+- **ALWAYS** logs every action in OPTIMIZATION_LOG.md
+
+---
+
 ## The Dispatcher (You)
 
 ### Identity
@@ -223,6 +288,8 @@ The human who runs the show. You're not a role — you're the orchestrator.
    └─ If NEEDS_FIXES → back to step 3
 5. PD session  → Updates status, next directive
    └─ Repeat from step 2 (or 1 if new direction needed)
+
+*. DO session  → (periodically) Optimizes docs, archives completed work
 ```
 
 ### Accelerated Workflow
@@ -237,17 +304,20 @@ For experienced users, you can skip some steps:
 
 ## Role Boundaries — Quick Reference
 
-| Action | PD | DD | Team |
-|--------|-----|-----|------|
-| Set project vision | **Yes** | No | No |
-| Issue directives | **Yes** | No | No |
-| Create TODO tasks | No | **Yes** | No |
-| Make technical decisions | No | **Yes** | Propose |
-| Write code | No | No | **Yes** |
-| Write tests | No | No | **Yes** |
-| Review implementations | No | **Yes** | No |
-| Update phase status table | No | **Yes** | No |
-| Update strategic log | **Yes** | No | No |
-| Check TODO boxes | No | No | **Yes** |
-| Write reports | No | No | **Yes** |
-| Modify ARCHITECTURE_VISION | Co-approve | Propose | No |
+| Action | PD | DD | Team | DO |
+|--------|-----|-----|------|-----|
+| Set project vision | **Yes** | No | No | No |
+| Issue directives | **Yes** | No | No | No |
+| Create TODO tasks | No | **Yes** | No | No |
+| Make technical decisions | No | **Yes** | Propose | No |
+| Write code | No | No | **Yes** | No |
+| Write tests | No | No | **Yes** | No |
+| Review implementations | No | **Yes** | No | No |
+| Update phase status table | No | **Yes** | No | No |
+| Update strategic log | **Yes** | No | No | No |
+| Check TODO boxes | No | No | **Yes** | No |
+| Write reports | No | No | **Yes** | No |
+| Modify ARCHITECTURE_VISION | Co-approve | Propose | No | No |
+| Optimize documents | No | No | No | **Yes** |
+| Archive completed content | No | No | No | **Yes** |
+| Knowledge retrieval | No | No | No | **Yes** |
