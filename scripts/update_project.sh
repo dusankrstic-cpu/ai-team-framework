@@ -69,6 +69,13 @@ else
     CURRENT_VERSION="unknown"
 fi
 
+# Check for config file
+CONFIG_FILE="$PROJECT_DIR/.ai-team-config.yml"
+HAS_CONFIG=false
+if [ -f "$CONFIG_FILE" ]; then
+    HAS_CONFIG=true
+fi
+
 # ─────────────────────────────────────────────────────────────
 # Disclaimer
 # ─────────────────────────────────────────────────────────────
@@ -82,6 +89,11 @@ echo -e "  Project:          ${CYAN}$PROJECT_DIR${NC}"
 echo -e "  Team files:       ${CYAN}$TEAM_PATH${NC}"
 echo -e "  Current version:  ${YELLOW}$CURRENT_VERSION${NC}"
 echo -e "  New version:      ${GREEN}$NEW_VERSION${NC}"
+if [ "$HAS_CONFIG" = true ]; then
+    echo -e "  Config file:      ${GREEN}.ai-team-config.yml (found — deterministic update)${NC}"
+else
+    echo -e "  Config file:      ${YELLOW}.ai-team-config.yml (not found — AI extraction fallback)${NC}"
+fi
 echo ""
 echo -e "${YELLOW}┌──────────────────────────────────────────────────────────────────────┐${NC}"
 echo -e "${YELLOW}│  ⚠  WARNING — READ CAREFULLY                                       │${NC}"
@@ -135,6 +147,11 @@ if [ -f "$PROJECT_DIR/start_role.sh" ]; then
     cp "$PROJECT_DIR/start_role.sh" "$BACKUP_DIR/start_role.sh"
 fi
 
+# Back up config file if it exists
+if [ -f "$CONFIG_FILE" ]; then
+    cp "$CONFIG_FILE" "$BACKUP_DIR/.ai-team-config.yml"
+fi
+
 echo -e "${GREEN}  ✓ Backup created at $BACKUP_DIR/${NC}"
 echo ""
 
@@ -148,6 +165,21 @@ echo -e "${CYAN}Preparing update...${NC}"
 UPDATE_PROMPT="$(cat "$FRAMEWORK_DIR/update/UPDATE_PROMPT.md")"
 
 # Build the full instruction for Claude
+CONFIG_SECTION=""
+if [ "$HAS_CONFIG" = true ]; then
+    CONFIG_CONTENT="$(cat "$CONFIG_FILE")"
+    CONFIG_SECTION="
+## Project Configuration (source of truth)
+
+The following YAML config contains all project customizations.
+Use these values directly — do NOT extract from existing files.
+
+\`\`\`yaml
+$CONFIG_CONTENT
+\`\`\`
+"
+fi
+
 FULL_PROMPT="$UPDATE_PROMPT
 
 ---
@@ -157,21 +189,22 @@ FULL_PROMPT="$UPDATE_PROMPT
 **Framework directory (new templates):** $FRAMEWORK_DIR/templates/
 **Project directory:** $PROJECT_DIR
 **Team files directory:** $TEAM_PATH
+**Config file:** $CONFIG_FILE ($( [ "$HAS_CONFIG" = true ] && echo "EXISTS" || echo "NOT FOUND — generate during update" ))
 **Current framework version:** $CURRENT_VERSION
 **New framework version:** $NEW_VERSION
-
+$CONFIG_SECTION
 ## Your Task
 
-1. Read all existing team files in \`$TEAM_PATH/\` to extract project-specific customizations
+1. Read project configuration from \`.ai-team-config.yml\` (or extract from existing files if not found)
 2. Read all new template files in \`$FRAMEWORK_DIR/templates/\`
-3. Read the existing \`$PROJECT_DIR/start_role.sh\` (if it exists) to extract CLAUDE_FLAGS
-4. Follow the Update Procedure from the instructions above
-5. Write updated static files to \`$TEAM_PATH/\`
-6. Write updated \`start_role.sh\` to \`$PROJECT_DIR/start_role.sh\`
-7. Write \`$NEW_VERSION\` to \`$TEAM_PATH/.framework_version\`
+3. Follow the Update Procedure from the instructions above
+4. Write updated static files to \`$TEAM_PATH/\`
+5. Write updated \`start_role.sh\` to \`$PROJECT_DIR/start_role.sh\`
+6. Update \`framework_version\` in \`.ai-team-config.yml\` and write \`$NEW_VERSION\` to \`$TEAM_PATH/.framework_version\`
+7. If \`.ai-team-config.yml\` did not exist, generate it now (migration)
 8. Print the update report
 
-**Start now. Read the existing files, then apply the update.**"
+**Start now. Read the configuration, then apply the update.**"
 
 # ─────────────────────────────────────────────────────────────
 # Run Claude

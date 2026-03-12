@@ -82,6 +82,17 @@ plus a launcher script.
 - [ ] `docs/TEAM/ARCHIVE/REPORTS/` — For archived reports (**if DO enabled**)
 - [ ] `docs/TEAM/ARCHIVE/DECISIONS/` — For archived decision batches (**if DO enabled**)
 
+### Configuration File (1 file)
+
+- [ ] `.ai-team-config.yml` — All user preferences in a single YAML file
+  - Generated BEFORE all other files
+  - All 19 question answers present
+  - Enum values normalized (e.g., `moderate` not `b) Moderate`)
+  - `framework_version` matches VERSION file
+  - `claude_flags` matches user's choice
+  - `phases` list matches user's phase definitions (without Phase 0)
+  - All values in generated files match this config
+
 ### Launcher Script (1 file)
 
 - [ ] `start_role.sh` — Parameterized script in project root
@@ -112,6 +123,8 @@ Before finishing, verify:
 - [ ] **Test command is consistent** — Same command in DD and Team role files
 - [ ] **Coding conventions match** — DD's Section 4 and Team's Section 4 agree on all conventions
 - [ ] **Communication language applied consistently** — All generated content uses the user's chosen language
+- [ ] **Config file is complete** — `.ai-team-config.yml` contains all 19 answers with normalized enum values
+- [ ] **Config matches generated files** — Every value in role definitions matches the config file
 
 ---
 

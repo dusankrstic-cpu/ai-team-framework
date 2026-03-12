@@ -59,28 +59,30 @@ After the Wizard runs, your project will have:
 
 ```
 your-project/
+├── .ai-team-config.yml                   # All project preferences (source of truth)
 ├── docs/
 │   └── TEAM/
-│       ├── PROJECT_DIRECTOR.md       # PD role definition
-│       ├── DEVELOPMENT_DIRECTOR.md   # DD role definition
-│       ├── DEVELOPMENT_TEAM.md       # Team role definition
-│       ├── PROJECT_STATUS.md         # Shared state file
-│       ├── DECISIONS.md              # DD's technical memory
-│       ├── TODO.md                   # Task backlog
-│       ├── ARCHITECTURE_VISION.md    # Technical vision
-│       ├── DIRECTIVE_TEMPLATE.md     # Format reference
-│       ├── REPORT_TEMPLATE.md        # Format reference
-│       ├── DIRECTIVES/               # PD's directives (empty)
-│       ├── REPORTS/                  # Team's reports (empty)
-│       ├── DOC_OPTIMIZER.md          # DO role definition (if enabled)
-│       ├── OPTIMIZATION_LOG.md       # DO's optimization memory (if enabled)
-│       ├── ARCHIVE_INDEX.md          # Archive index (if enabled)
-│       └── ARCHIVE/                  # Archived documents (if enabled)
-└── start_role.sh                     # Launcher script
+│       ├── PROJECT_DIRECTOR.md           # PD role definition
+│       ├── DEVELOPMENT_DIRECTOR.md       # DD role definition
+│       ├── DEVELOPMENT_TEAM.md           # Team role definition
+│       ├── PROJECT_STATUS.md             # Shared state file
+│       ├── DECISIONS.md                  # DD's technical memory
+│       ├── TODO.md                       # Task backlog
+│       ├── ARCHITECTURE_VISION.md        # Technical vision
+│       ├── DIRECTIVE_TEMPLATE.md         # Format reference
+│       ├── REPORT_TEMPLATE.md            # Format reference
+│       ├── DIRECTIVES/                   # PD's directives (empty)
+│       ├── REPORTS/                      # Team's reports (empty)
+│       ├── DOC_OPTIMIZER.md              # DO role definition (if enabled)
+│       ├── OPTIMIZATION_LOG.md           # DO's optimization memory (if enabled)
+│       ├── ARCHIVE_INDEX.md              # Archive index (if enabled)
+│       └── ARCHIVE/                      # Archived documents (if enabled)
+└── start_role.sh                         # Launcher script
 ```
 
 All files are customized for your project — your name, your tech stack, your
-conventions, your phases.
+conventions, your phases. The `.ai-team-config.yml` file stores all your preferences
+so the update script can regenerate files without re-asking questions.
 
 ### Using the Launcher Script
 
@@ -316,8 +318,10 @@ git pull
 
 2. **Backup** — All team files are backed up to `.framework_backup_TIMESTAMP/`
 
-3. **Update** — Claude reads your existing files, extracts all project-specific
-   customizations, and regenerates role definitions using the new templates.
+3. **Update** — Claude reads your `.ai-team-config.yml` for project preferences and
+   regenerates role definitions using the new templates. If the config file doesn't
+   exist (older projects), Claude extracts customizations from existing files and
+   generates the config as a one-time migration.
 
 4. **Report** — You'll see exactly what was updated and what was preserved.
 

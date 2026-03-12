@@ -53,7 +53,15 @@ If the new framework version adds new sections to `PROJECT_STATUS.md` (e.g., new
 
 ## Update Procedure
 
-### Step 1: Extract Project Context
+### Step 1: Read Project Configuration
+
+**If `.ai-team-config.yml` exists** (preferred path — deterministic update):
+
+Read the config file. It contains ALL project customizations as structured YAML.
+Use these values directly — do NOT extract from existing files. The config is the
+single source of truth.
+
+**If `.ai-team-config.yml` does NOT exist** (migration fallback):
 
 Read the EXISTING role files and extract:
 - Project name
@@ -69,6 +77,9 @@ Read the EXISTING role files and extract:
 - CLAUDE_FLAGS from existing `start_role.sh`
 - Whether DO (Documentation Optimizer) is currently enabled
 - Communication language used in the files
+
+Then **generate `.ai-team-config.yml`** from the extracted values and write it to the
+project root. This is a one-time migration — future updates will use the config directly.
 
 ### Step 2: Read New Templates
 
@@ -121,6 +132,7 @@ Regenerate `start_role.sh` in the project root:
 ### Step 7: Write Version Marker
 
 Create or update `docs/TEAM/.framework_version` with the new version number.
+Also update the `framework_version` field in `.ai-team-config.yml` to match.
 
 ### Step 8: Report
 
@@ -148,6 +160,7 @@ Preserved (stateful files untouched):
 New features available:
   • [list any new features the user can manually enable]
 
+Config: .ai-team-config.yml [found and used / generated (migration)]
 Version: X.Y.Z → A.B.C
 Backup: .framework_backup_TIMESTAMP/
 ```
@@ -156,7 +169,10 @@ Backup: .framework_backup_TIMESTAMP/
 
 ## Important Notes
 
-- Use the SAME communication language as the existing project files
+- If the project has `.ai-team-config.yml`, treat it as the single source of truth. Do NOT override its values based on what you find in existing files
+- If the config file does not exist, generate one during the update as a one-time migration step
+- If the new framework version adds new config fields, add them to the config with sensible defaults and note this in the report
+- Use the SAME communication language as specified in the config (or as found in existing files)
 - Preserve ALL project-specific conventions exactly as they were
 - When in doubt, preserve existing content — don't remove anything from stateful files
 - The update should be invisible to the roles — they should read their updated files and continue working exactly as before, just with any new framework improvements
