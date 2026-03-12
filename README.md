@@ -1,6 +1,10 @@
-# AI Team Framework
+<p align="center">
+  <img src="logo.png" alt="AI Team Framework" width="300">
+</p>
 
-**Turn Claude Code into a self-organizing AI development team.**
+<h1 align="center">AI Team Framework</h1>
+
+<p align="center"><strong>Turn Claude Code into a self-organizing AI development team.</strong></p>
 
 AI Team Framework is an orchestration layer for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) on **Linux** that transforms a single AI assistant into a coordinated team of specialized roles — each with clear authority, strict document ownership, and zero shared memory. The result: traceable, repeatable, production-grade software delivery driven by AI.
 
