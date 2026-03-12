@@ -35,7 +35,7 @@ Each role is a separate Claude Code session that reads specific documents, does 
 - **Auto-orchestrator** — watches document state, recommends next role, auto-runs cycles with confirmation at quality gates
 
 ### Interactive Setup Wizard
-- **19-question guided setup** — walks you through project configuration one question at a time
+- **20-question guided setup** — walks you through project configuration one question at a time
 - **Generates 9-12 customized files** — role definitions, state files, format references, launcher script
 - **Tech-stack-aware defaults** — suggests conventions based on your language and framework
 - **Configurable autonomy** — choose how much control you keep vs. delegate to AI roles
@@ -146,7 +146,7 @@ Or use the launcher script:
 /path/to/ai-team-framework/scripts/start_role.sh wizard
 ```
 
-The Wizard asks 19 questions about your project — name, tech stack, conventions, phases, autonomy level, review strictness, CLI flags — then generates a complete `docs/TEAM/` directory with everything you need.
+The Wizard asks 20 questions about your project — name, tech stack, conventions, phases, autonomy level, review strictness, CLI flags — then generates a complete `docs/TEAM/` directory with everything you need.
 
 ### 3. Start your first cycle
 
@@ -256,7 +256,7 @@ ai-team-framework/
 ├── LICENSE                              # MIT
 ├── VERSION                              # Framework version
 ├── wizard/
-│   ├── WIZARD.md                        # 19-question interactive setup
+│   ├── WIZARD.md                        # 20-question interactive setup
 │   └── WIZARD_CHECKLIST.md              # Generation completeness checklist
 ├── templates/                           # Annotated reference templates
 │   ├── PROJECT_DIRECTOR.md

@@ -169,7 +169,25 @@ After reading, report to the project owner:
 - [Where docs go — e.g., "docs/"]
 - [Any module organization rules]
 
-### 6.4 Worktree Implementation (When Delegated)
+### 6.4 Container Isolation (Optional)
+
+<!-- WIZARD: Include this section if the user wants Docker-based isolation for the
+     Team role. Recommended for projects that install third-party packages or run
+     untrusted code. Omit if the user doesn't need container isolation. -->
+
+When working in a Docker container (configured by the dispatcher):
+
+1. **All code execution happens inside the container** — compilation, test runs,
+   package installations. The host filesystem is mounted as a volume.
+2. **Never install packages directly on the host** — use the container's package manager
+3. **If the container is missing a tool**, note it in your report under Open Questions.
+   Do NOT install system-level tools yourself.
+4. **Test results from inside the container are authoritative** — include them in your report
+
+The container protects the host system from unintended side effects. Your source code
+changes still persist through the mounted volume.
+
+### 6.5 Worktree Implementation (When Delegated)
 
 <!-- WIZARD: Include this section if worktree delegation is enabled in the DD role.
      Omit for trunk-based simple projects. -->

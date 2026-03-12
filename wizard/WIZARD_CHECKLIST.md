@@ -123,7 +123,7 @@ Before finishing, verify:
 - [ ] **Test command is consistent** — Same command in DD and Team role files
 - [ ] **Coding conventions match** — DD's Section 4 and Team's Section 4 agree on all conventions
 - [ ] **Communication language applied consistently** — All generated content uses the user's chosen language
-- [ ] **Config file is complete** — `.ai-team-config.yml` contains all 19 answers with normalized enum values
+- [ ] **Config file is complete** — `.ai-team-config.yml` contains all 20 answers with normalized enum values
 - [ ] **Config matches generated files** — Every value in role definitions matches the config file
 
 ---
@@ -157,6 +157,7 @@ The Wizard must have answers to all of these before generating:
 - [ ] Naming conventions (files, classes, functions, variables, constants)
 - [ ] Branch strategy and commit conventions
 - [ ] Any special rules or constraints
+- [ ] Docker container isolation (yes / no)
 
 ### Phase 5 — Documentation Optimizer
 - [ ] DO enablement (yes / no)
